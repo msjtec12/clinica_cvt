@@ -24,14 +24,19 @@ export function Footer({ clinic }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-petrol-900">
           {/* Identidade e Responsável Técnico */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-lg bg-petrol-900 text-turquoise-300 flex items-center justify-center font-bold">
-                CVT
+            <Link
+              href="/"
+              className="inline-block focus:outline-none focus:ring-2 focus:ring-turquoise-400 rounded-2xl"
+              aria-label={`Página inicial de ${clinicName}`}
+            >
+              <div className="bg-white px-3.5 py-2 rounded-2xl w-fit shadow-sm border border-white/20 hover:opacity-95 transition-opacity">
+                <img
+                  src={isFilled(clinic.logo) ? clinic.logo : "/images/logo-cvt.svg"}
+                  alt={clinicName}
+                  className="h-10 sm:h-11 w-auto object-contain"
+                />
               </div>
-              <span className="font-bold text-white text-base tracking-tight">
-                {clinicName}
-              </span>
-            </div>
+            </Link>
 
             <p className="text-xs text-slate-400 leading-relaxed">
               {isFilled(clinic.shortDescription)
