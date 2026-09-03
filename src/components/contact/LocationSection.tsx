@@ -40,18 +40,18 @@ export function LocationSection({ clinic }: LocationSectionProps) {
       </div>
 
       {/* Foto Real da Fachada para Fácil Identificação */}
-      <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-subtle group">
+      <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-card group">
         <img
           src="/images/fachada-cvt.png"
           alt="Fachada da Clínica Veterinária Thieres (CVT) em Inácio Monteiro"
-          className="w-full h-48 sm:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-60 sm:h-72 md:h-80 object-cover object-center group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-sm px-3.5 py-2 rounded-xl border border-slate-200/80 shadow-md flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-800">
+        <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-200/80 shadow-md flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs font-semibold text-slate-900">
             <span className="text-amber-500">★★★★★</span>
             <span>4,8 no Google (322 avaliações)</span>
           </div>
-          <span className="text-[11px] text-slate-500 font-medium">Esquina de fácil acesso</span>
+          <span className="text-[11px] text-petrol-900 font-bold bg-petrol-50 border border-petrol-100 px-2.5 py-0.5 rounded-full">Fachada na Esquina</span>
         </div>
       </div>
 

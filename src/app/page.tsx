@@ -273,8 +273,12 @@ export default async function HomePage() {
             </div>
 
             <div className="lg:col-span-4 flex flex-col items-center text-center p-5 bg-white rounded-2xl border border-slate-200 shadow-subtle space-y-2">
-              <div className="w-16 h-16 rounded-full bg-petrol-900 text-turquoise-300 flex items-center justify-center font-bold text-xl shadow border-2 border-white">
-                PV
+              <div className="w-20 h-20 rounded-full overflow-hidden shadow-md border-2 border-petrol-700 flex-shrink-0">
+                <img
+                  src="/images/dra-priscila-clean.png"
+                  alt="Dra. Priscila Villanova Nunes"
+                  className="w-full h-full object-cover object-top"
+                />
               </div>
               <div>
                 <div className="font-bold text-slate-900 text-sm">Dra. Priscila Villanova Nunes</div>
