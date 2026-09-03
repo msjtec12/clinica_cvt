@@ -1,47 +1,34 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 120" width="100%" height="100%">
-  <!-- Cores fiéis ao Cartão de Visitas Oficial da CVT: Verde Floresta e Verde Pistache/Sálvia -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 180" width="100%" height="100%">
+  <!-- Logotipo Oficial CVT - Clínica Veterinária Thieres com Silhuetas de Cão e Gato -->
   <defs>
-    <linearGradient id="cvtForest" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#143b22"/>
-      <stop offset="100%" stop-color="#1b4d2e"/>
-    </linearGradient>
-    <linearGradient id="cvtSage" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#80ab73"/>
-      <stop offset="100%" stop-color="#69975b"/>
-    </linearGradient>
+    <style>
+      .cvt-green { fill: #0f5934; }
+      .cvt-stroke { stroke: #0f5934; stroke-width: 8; fill: none; }
+      .cvt-text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: 800; }
+    </style>
   </defs>
 
-  <!-- Letra C -->
-  <path d="M 68 22 C 34 22 14 42 14 65 C 14 88 34 108 68 108 C 88 108 98 100 102 94 L 88 82 C 84 86 78 92 68 92 C 46 92 34 76 34 65 C 34 54 46 38 68 38 C 78 38 84 44 88 48 L 102 36 C 98 30 88 22 68 22 Z" fill="url(#cvtForest)"/>
-  
-  <!-- Patinha dentro do C -->
-  <g fill="url(#cvtSage)" transform="translate(48, 50) scale(0.7)">
-    <ellipse cx="14" cy="22" rx="7" ry="6"/>
-    <circle cx="4" cy="11" r="3.5"/>
-    <circle cx="11" cy="5" r="3.5"/>
-    <circle cx="21" cy="5" r="3.5"/>
-    <circle cx="28" cy="11" r="3.5"/>
+  <!-- Silhueta do Cachorro (lado esquerdo) -->
+  <g class="cvt-green" transform="translate(10, 20) scale(1.15)">
+    <path d="M 12 100 C 12 75 16 55 28 35 C 32 28 38 12 40 4 C 42 2 45 4 47 10 C 50 18 53 28 55 35 C 62 42 72 45 82 48 C 92 50 102 54 98 62 C 95 68 85 68 76 72 C 68 76 60 84 56 94 C 54 98 52 104 50 110 L 12 110 Z"/>
   </g>
 
-  <!-- Letra V -->
-  <path d="M 104 26 L 126 94 L 146 94 L 168 26 L 146 26 L 136 68 L 124 26 Z" fill="url(#cvtForest)"/>
-
-  <!-- Letra T -->
-  <path d="M 166 26 L 226 26 L 226 42 L 206 42 L 206 94 L 186 94 L 186 42 L 166 42 Z" fill="url(#cvtForest)"/>
-  
-  <!-- Silhueta de gato no T -->
-  <g fill="url(#cvtSage)" transform="translate(198, 28) scale(0.55)">
-    <path d="M 2 12 L 6 2 L 14 6 C 18 4 22 4 26 6 L 34 2 L 38 12 C 42 18 42 26 38 32 C 34 38 26 40 20 40 C 14 40 6 38 2 32 C -2 26 -2 18 2 12 Z"/>
+  <!-- Silhueta do Gato (lado direito) -->
+  <g class="cvt-green" transform="translate(425, 22) scale(1.15)">
+    <path d="M 80 108 L 40 108 C 38 100 36 92 34 84 C 30 72 22 66 14 62 C 10 60 4 58 6 52 C 8 46 16 46 22 42 C 28 38 32 30 30 20 C 29 14 28 8 32 4 C 36 8 42 18 45 25 C 52 28 62 26 70 20 C 72 18 76 10 78 4 C 82 8 82 16 82 24 C 84 45 88 75 88 108 Z"/>
   </g>
 
-  <!-- Linha divisória horizontal esquerda -->
-  <line x1="14" y1="106" x2="68" y2="106" stroke="url(#cvtSage)" stroke-width="2"/>
-  
-  <!-- Linha divisória horizontal direita -->
-  <line x1="262" y1="106" x2="340" y2="106" stroke="url(#cvtSage)" stroke-width="2"/>
+  <!-- Elipse / Anel inclinado ao redor da sigla CVT -->
+  <ellipse cx="270" cy="72" rx="105" ry="46" class="cvt-stroke" transform="rotate(-7 270 72)" />
 
-  <!-- Texto: CLÍNICA VETERINÁRIA THIERES -->
-  <text x="180" y="110" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" letter-spacing="3" fill="#143b22" text-anchor="middle">
-    CLÍNICA VETERINÁRIA THIERES
+  <!-- Sigla CVT Central em Negrito com efeito de recorte no anel -->
+  <text x="270" y="92" text-anchor="middle" class="cvt-green cvt-text" font-size="78" letter-spacing="-2">CVT</text>
+
+  <!-- Subtítulo: Clínica Veterinária Thieres -->
+  <text x="270" y="148" text-anchor="middle" class="cvt-green cvt-text" font-size="28" letter-spacing="0.5">Clínica Veterinária Thieres</text>
+
+  <!-- Linha de Serviços: CONSULTAS • CIRURGIAS • EXAMES • VACINAS -->
+  <text x="270" y="172" text-anchor="middle" fill="#136039" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="13" letter-spacing="3">
+    CONSULTAS • CIRURGIAS • EXAMES • VACINAS
   </text>
 </svg>

@@ -4,24 +4,26 @@ import { ClinicSettings } from "@/types";
  * ==============================================================================
  * DADOS REAIS OFICIAIS DA CLÍNICA VETERINÁRIA THIERES (CVT)
  * ==============================================================================
- * Dados confirmados através do perfil oficial, cartão profissional e Google Maps:
- * - Dra. Priscila Villanova Nunes | CRMV-SP 19.394
- * - Rua Cachoeira Camaleão, 162 - Inácio Monteiro - São Paulo / SP
- * - Telefones: (11) 2153-8100 / (11) 2771-1586
- * - Avaliação real no Google: 4,8 estrelas (mais de 320 avaliações de tutores)
+ * Atualizado com base no material institucional oficial (flyer e banner):
+ * - Slogan: "Cuidar é o nosso compromisso! ❤️"
+ * - Endereço oficial: Rua Cachoeira do Limão, 10 - casa 2 - Inácio Monteiro, São Paulo - SP
+ * - Telefone principal: (11) 2153-8100 / (11) 2771-1586
+ * - Modelo de atendimento: Atendimento por ordem de chegada
+ * - Horários: Segunda a Sexta das 9:30h às 17:30h | Sábado das 9:30h às 14h
+ * - Aviso da clínica: "Se possível, ligue antes para confirmar o atendimento, pois pode haver alteração no horário."
  * ==============================================================================
  */
 export const defaultClinicData: ClinicSettings = {
   name: "Clínica Veterinária Thieres (CVT)",
-  shortDescription: "Cuidado com amor, excelência e confiança para cães e gatos em Inácio Monteiro - SP. Mais de 21 anos de dedicação da Dra. Priscila Villanova Nunes.",
+  shortDescription: "Cuidar é o nosso compromisso! Atendimento com amor e dedicação para cães e gatos em Inácio Monteiro pela Dra. Priscila Villanova Nunes.",
   logo: "/images/logo-cvt.svg",
   whatsapp: "(11) 2153-8100",
   phone: "(11) 2153-8100",
   email: "",
-  address: "Rua Cachoeira Camaleão, 162 - Conj. Hab. Inácio Monteiro, São Paulo - SP, CEP 08472-150",
-  mapsUrl: "https://www.google.com/maps/search/?api=1&query=Clinica+Veterinaria+Thieres+Rua+Cachoeira+Camaleao+162+Inacio+Monteiro+Sao+Paulo",
-  openingHours: "Segunda a Sexta das 9h30 às 17h30 | Sábados das 9h30 às 14h",
-  emergencyCare: "Atendimento nos horários de funcionamento da clínica (Seg a Sex das 9h30 às 17h30 e Sábados das 9h30 às 14h). Fora desse período, consulte nossa recepção para os hospitais 24h parceiros na Zona Leste.",
+  address: "Rua Cachoeira do Limão, 10 - casa 2 - Inácio Monteiro, São Paulo - SP",
+  mapsUrl: "https://www.google.com/maps/search/?api=1&query=Clinica+Veterinaria+Thieres+Rua+Cachoeira+do+Limao+10+Inacio+Monteiro+Sao+Paulo",
+  openingHours: "Segunda a Sexta-feira das 9:30h às 17:30h | Sábados das 9:30h às 14h",
+  emergencyCare: "Atendimento por ordem de chegada no horário de funcionamento (Seg a Sex 9:30h às 17:30h e Sáb 9:30h às 14h). Se possível, ligue antes para confirmar o atendimento.",
   emergencyReferenceContact: "Hospitais de emergência 24h parceiros na Zona Leste (orientados na recepção)",
   acceptedSpecies: "Cães e Gatos",
   paymentMethods: "Pix, Cartões de Débito, Crédito e Dinheiro",
@@ -30,7 +32,7 @@ export const defaultClinicData: ClinicSettings = {
   crmv: "CRMV-SP 19.394",
   city: "São Paulo - SP",
   neighborhood: "Inácio Monteiro",
-  requiresAppointment: true,
+  requiresAppointment: false, // Atendimento por ordem de chegada!
   lastPriceReviewDate: "2026-09-01",
   priceDisclaimer: "Os valores informados correspondem aos serviços básicos. Exames, medicamentos, materiais ou procedimentos complementares dependem da avaliação presencial com a Dra. Priscila Villanova e são informados previamente com total transparência.",
 };

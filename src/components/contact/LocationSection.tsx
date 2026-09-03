@@ -94,11 +94,15 @@ export function LocationSection({ clinic }: LocationSectionProps) {
             <span className="font-medium text-slate-900 block mt-0.5">
               {hasHours ? clinic.openingHours : "Consulte os horários da recepção"}
             </span>
-            <span className="text-xs text-slate-500 block mt-0.5">
-              {clinic.requiresAppointment
-                ? "Atendimentos preferencialmente sob agendamento prévio."
-                : "Consulte disponibilidade de encaixes."}
+            <span className="text-xs font-semibold text-petrol-800 block mt-0.5">
+              Atendimento por ordem de chegada
             </span>
+            <div className="mt-2 bg-petrol-50 border border-petrol-200/80 rounded-xl p-2.5 flex items-center gap-2 text-xs text-petrol-950">
+              <span className="w-4 h-4 rounded-full bg-petrol-900 text-white flex items-center justify-center font-bold text-[9px] flex-shrink-0">
+                !
+              </span>
+              <span>Se possível, <strong>ligue antes</strong> para confirmar o atendimento.</span>
+            </div>
           </div>
         </div>
 

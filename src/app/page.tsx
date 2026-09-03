@@ -86,20 +86,20 @@ export default async function HomePage() {
   return (
     <div className="space-y-8 sm:space-y-12 pb-16 pt-4 sm:pt-6">
       {/* ========================================================================= */}
-      {/* 1. TOPO OTIMIZADO: CARTÃO ESSENCIAL DIRETO (SEM HERO PROLIXO) */}
+      {/* 1. TOPO OTIMIZADO: CARTÃO ESSENCIAL DIRETO FIEL AO FLYER OFICIAL */}
       {/* ========================================================================= */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl border border-slate-200 bg-white p-5 sm:p-7 shadow-card">
+        <div className="rounded-3xl border border-petrol-200/80 bg-white p-5 sm:p-7 shadow-card space-y-4">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             {/* Identificação da Clínica e Médica Responsável */}
             <div className="space-y-2">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-turquoise-50 text-turquoise-800 text-xs font-semibold">
-                  <ShieldCheck className="w-3.5 h-3.5 text-turquoise-600" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-petrol-50 text-petrol-900 text-xs font-semibold border border-petrol-100">
+                  <ShieldCheck className="w-3.5 h-3.5 text-petrol-700" />
                   <span>Dra. Priscila Villanova Nunes • CRMV-SP 19.394</span>
                 </span>
-                <span className="text-xs text-slate-500 font-medium">
-                  Mais de 21 anos de dedicação veterinária
+                <span className="text-xs text-petrol-800 font-semibold italic">
+                  Cuidar é o nosso compromisso! ❤️
                 </span>
               </div>
 
@@ -107,15 +107,18 @@ export default async function HomePage() {
                 Clínica Veterinária Thieres (CVT)
               </h1>
 
-              <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs sm:text-sm text-slate-600">
+              <div className="flex flex-wrap items-center gap-y-1.5 gap-x-4 text-xs sm:text-sm text-slate-600">
                 <div className="flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 text-slate-400 flex-shrink-0" />
-                  <span>Rua Cachoeira Camaleão, 162 - Inácio Monteiro, SP</span>
+                  <MapPin className="w-4 h-4 text-petrol-700 flex-shrink-0" />
+                  <span className="font-medium">Rua Cachoeira do Limão, 10 - casa 2 - Inácio Monteiro</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-slate-400 flex-shrink-0" />
-                  <span>Seg a Sex: 9h30 às 17h30 | Sáb: 9h30 às 14h</span>
+                  <Clock className="w-4 h-4 text-petrol-700 flex-shrink-0" />
+                  <span>Seg a Sex: <strong>9:30h às 17:30h</strong> | Sáb: <strong>9:30h às 14h</strong></span>
                 </div>
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-petrol-100 text-petrol-900">
+                  Atendimento por ordem de chegada
+                </span>
               </div>
             </div>
 
@@ -123,8 +126,8 @@ export default async function HomePage() {
             <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
               <WhatsAppButton
                 phone={clinic.whatsapp}
-                message="Olá! Gostaria de falar com a recepção da Clínica Veterinária Thieres para tirar dúvidas ou agendar."
-                variant="coral"
+                message="Olá! Gostaria de falar com a recepção da Clínica Veterinária Thieres para confirmar o atendimento."
+                variant="primary"
                 size="md"
                 className="w-full sm:w-auto shadow-sm"
               >
@@ -133,7 +136,7 @@ export default async function HomePage() {
 
               <a
                 href="tel:1121538100"
-                className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs sm:text-sm font-semibold border border-slate-200 transition-colors w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-petrol-50 hover:bg-petrol-100 text-petrol-900 text-xs sm:text-sm font-bold border border-petrol-200 transition-colors w-full sm:w-auto"
               >
                 <Phone className="w-4 h-4 text-petrol-700" />
                 <span>Ligar: (11) 2153-8100</span>
@@ -144,14 +147,24 @@ export default async function HomePage() {
                   href={clinic.mapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-3 rounded-xl bg-white hover:bg-slate-50 text-petrol-700 text-xs sm:text-sm font-semibold border border-slate-200 transition-colors"
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-3 rounded-xl bg-white hover:bg-slate-50 text-petrol-800 text-xs sm:text-sm font-semibold border border-slate-200 transition-colors"
                   title="Abrir rota no Google Maps"
                 >
-                  <Navigation className="w-4 h-4 text-turquoise-600" />
+                  <Navigation className="w-4 h-4 text-petrol-700" />
                   <span>Como Chegar</span>
                 </a>
               )}
             </div>
+          </div>
+
+          {/* Aviso Oficial do Flyer com Fundo Menta */}
+          <div className="bg-petrol-50 border border-petrol-200/80 rounded-2xl p-3 sm:p-4 flex items-center gap-3 text-xs sm:text-sm text-petrol-950">
+            <div className="w-7 h-7 rounded-full bg-petrol-900 text-white flex items-center justify-center font-bold flex-shrink-0 text-xs">
+              !
+            </div>
+            <p className="leading-relaxed">
+              <strong>Aviso aos tutores:</strong> Se possível, <strong>ligue antes</strong> para confirmar o atendimento, pois pode haver alteração no horário.
+            </p>
           </div>
         </div>
       </div>

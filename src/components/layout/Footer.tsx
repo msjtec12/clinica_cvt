@@ -156,10 +156,10 @@ export function Footer({ clinic }: FooterProps) {
           </div>
         </div>
 
-        {/* Faixa de Endereço Oficial igual ao Cartão de Visitas */}
+        {/* Faixa de Endereço Oficial igual ao Cartão e Flyer */}
         <div className="mt-8 pt-4 pb-2 border-t border-petrol-800 text-center">
           <p className="text-xs sm:text-sm font-semibold tracking-wider text-turquoise-300 uppercase">
-            Rua Cachoeira Camaleão, 162 - Inácio Monteiro - São Paulo - SP
+            Rua Cachoeira do Limão, 10 - casa 2 - Inácio Monteiro - São Paulo - SP
           </p>
         </div>
 
