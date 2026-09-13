@@ -7,9 +7,9 @@ import { EmergencyNotice } from "@/components/common/EmergencyNotice";
 import { isFilled } from "@/lib/utils";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -20,7 +20,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const campaign = await getCampaignBySlug(params.slug);
+  const { slug } = await params;
+  const campaign = await getCampaignBySlug(slug);
   const clinic = await getClinicSettings();
   const clinicName = isFilled(clinic.name) ? clinic.name : "Clínica Veterinária";
 
@@ -42,9 +43,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function CampaignDetailPage({ params }: PageProps) {
+  const { slug } = await params;
   const [clinic, campaign] = await Promise.all([
     getClinicSettings(),
-    getCampaignBySlug(params.slug),
+    getCampaignBySlug(slug),
   ]);
 
   if (!campaign) {
@@ -53,10 +55,8 @@ export default async function CampaignDetailPage({ params }: PageProps) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-8">
-      {/* Componente Folder Digital */}
       <CampaignFolder campaign={campaign} whatsapp={clinic.whatsapp} />
 
-      {/* Aviso de Urgência no Rodapé da Página */}
       <div className="max-w-3xl mx-auto">
         <EmergencyNotice clinic={clinic} compact={true} />
       </div>
