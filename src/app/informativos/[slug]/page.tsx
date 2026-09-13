@@ -7,8 +7,6 @@ import {
   ShieldCheck,
   ArrowLeft,
   AlertTriangle,
-  MessageCircle,
-  Share2,
 } from "lucide-react";
 import { getClinicSettings, getArticleBySlug, getArticles } from "@/lib/data-service";
 import { formatDate, isFilled } from "@/lib/utils";
@@ -16,9 +14,9 @@ import { WhatsAppButton } from "@/components/common/WhatsAppButton";
 import { EmergencyNotice } from "@/components/common/EmergencyNotice";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -29,7 +27,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const article = await getArticleBySlug(params.slug);
+  const { slug } = await params;
+  const article = await getArticleBySlug(slug);
   const clinic = await getClinicSettings();
   const clinicName = isFilled(clinic.name) ? clinic.name : "Clínica Veterinária";
 
@@ -51,9 +50,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function ArticleDetailPage({ params }: PageProps) {
+  const { slug } = await params;
   const [clinic, article] = await Promise.all([
     getClinicSettings(),
-    getArticleBySlug(params.slug),
+    getArticleBySlug(slug),
   ]);
 
   if (!article) {
@@ -64,7 +64,6 @@ export default async function ArticleDetailPage({ params }: PageProps) {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-8">
-      {/* Botão de Retorno */}
       <div>
         <Link
           href="/informativos"
@@ -76,7 +75,6 @@ export default async function ArticleDetailPage({ params }: PageProps) {
       </div>
 
       <article className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-10 shadow-card space-y-8">
-        {/* Cabeçalho do Artigo */}
         <header className="space-y-4 border-b border-slate-100 pb-6">
           <div className="flex flex-wrap items-center gap-3 text-xs">
             <span className="font-semibold text-turquoise-800 bg-turquoise-50 px-3 py-1 rounded-full uppercase tracking-wider">
@@ -97,7 +95,6 @@ export default async function ArticleDetailPage({ params }: PageProps) {
             {article.summary}
           </p>
 
-          {/* Dados do Revisor Técnico Veterinário */}
           {article.technicalReviewerName && (
             <div className="flex items-center gap-2 pt-2 text-xs text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100 w-fit">
               <ShieldCheck className="w-4 h-4 text-petrol-700 flex-shrink-0" />
@@ -109,12 +106,10 @@ export default async function ArticleDetailPage({ params }: PageProps) {
           )}
         </header>
 
-        {/* Conteúdo Educativo em Linguagem Clara */}
         <div className="prose prose-slate max-w-none text-slate-700 text-sm sm:text-base leading-relaxed space-y-4 whitespace-pre-line">
           {article.content}
         </div>
 
-        {/* Aviso Ético Obrigatório: O material não substitui avaliação médica */}
         <div className="rounded-2xl bg-amber-50/80 border border-amber-200/80 p-5 space-y-2 text-xs sm:text-sm text-amber-950">
           <div className="flex items-center gap-2 font-bold text-amber-900">
             <AlertTriangle className="w-4 h-4 text-amber-700 flex-shrink-0" />
@@ -125,7 +120,6 @@ export default async function ArticleDetailPage({ params }: PageProps) {
           </p>
         </div>
 
-        {/* Chamada para Ação / Agendamento */}
         <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
           <div className="text-xs text-slate-500">
             Dúvidas sobre os cuidados do seu pet? Fale diretamente com nossa equipe.
@@ -141,7 +135,6 @@ export default async function ArticleDetailPage({ params }: PageProps) {
         </div>
       </article>
 
-      {/* Aviso de Urgência */}
       <EmergencyNotice clinic={clinic} compact={true} />
     </div>
   );
