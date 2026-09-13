@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckCircle2, AlertCircle, MessageCircle } from "lucide-react";
+import { AlertCircle, MessageCircle, ShieldCheck } from "lucide-react";
 import { ServiceItem } from "@/types";
 import { formatCurrency, getWhatsAppLink } from "@/lib/utils";
 
@@ -16,9 +16,9 @@ export function PriceTable({ services, whatsapp }: PriceTableProps) {
           <tr className="bg-slate-50/80 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wider">
             <th className="py-3.5 px-4 sm:px-6">Serviço</th>
             <th className="py-3.5 px-4">Categoria</th>
-            <th className="py-3.5 px-4 hidden md:table-cell">O que inclui</th>
+            <th className="py-3.5 px-4 hidden md:table-cell">Informações</th>
             <th className="py-3.5 px-4">Avaliação Prévia</th>
-            <th className="py-3.5 px-4 text-right">Valor Estimado</th>
+            <th className="py-3.5 px-4 text-right">Condição de valor</th>
             <th className="py-3.5 px-4 sm:px-6 text-center">Contato</th>
           </tr>
         </thead>
@@ -26,10 +26,11 @@ export function PriceTable({ services, whatsapp }: PriceTableProps) {
           {services.map((service) => {
             const whatsappMsg = `Olá! Vi na tabela do site o serviço "${service.name}" e gostaria de consultar informações e agendamento.`;
             const waHref = getWhatsAppLink(whatsapp, whatsappMsg);
+            const requiresClinicalQuote =
+              service.requiresEvaluation || service.categorySlug === "cirurgias";
 
             return (
               <tr key={service.id} className="hover:bg-slate-50/60 transition-colors">
-                {/* Nome e descrição */}
                 <td className="py-4 px-4 sm:px-6">
                   <div className="font-bold text-slate-900">{service.name}</div>
                   <div className="text-xs text-slate-500 line-clamp-1 mt-0.5">
@@ -37,42 +38,43 @@ export function PriceTable({ services, whatsapp }: PriceTableProps) {
                   </div>
                 </td>
 
-                {/* Categoria */}
                 <td className="py-4 px-4">
                   <span className="inline-block text-[11px] font-medium text-turquoise-800 bg-turquoise-50 px-2.5 py-0.5 rounded-full whitespace-nowrap">
                     {service.categoryName}
                   </span>
                 </td>
 
-                {/* Itens inclusos (desktop) */}
                 <td className="py-4 px-4 hidden md:table-cell">
                   {service.includedItems && service.includedItems.length > 0 ? (
                     <span className="text-xs text-slate-600 line-clamp-2">
                       {service.includedItems.join(" • ")}
                     </span>
                   ) : (
-                    <span className="text-xs text-slate-400 italic">Padrão da clínica</span>
+                    <span className="text-xs text-slate-400 italic">Consulte a clínica</span>
                   )}
                 </td>
 
-                {/* Avaliação prévia */}
                 <td className="py-4 px-4">
                   {service.requiresEvaluation ? (
                     <span className="inline-flex items-center gap-1 text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded font-medium">
                       <AlertCircle className="w-3.5 h-3.5" />
-                      Obrigatória
+                      Necessária
                     </span>
                   ) : (
-                    <span className="text-xs text-slate-500">Direto / Triagem</span>
+                    <span className="text-xs text-slate-500">Conforme o serviço</span>
                   )}
                 </td>
 
-                {/* Valor */}
                 <td className="py-4 px-4 text-right whitespace-nowrap">
-                  {service.priceType === "exact" && service.exactPrice ? (
+                  {requiresClinicalQuote ? (
+                    <span className="inline-flex items-center gap-1 text-xs font-medium text-petrol-700 bg-petrol-50 px-2 py-1 rounded">
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                      Após avaliação
+                    </span>
+                  ) : service.priceType === "exact" && service.exactPrice ? (
                     <div className="font-bold text-slate-900">
                       {formatCurrency(service.exactPrice)}
-                      <span className="text-[10px] text-slate-500 block font-normal">fixo</span>
+                      <span className="text-[10px] text-slate-500 block font-normal">informado pela clínica</span>
                     </div>
                   ) : service.priceType === "starting_at" && service.startingPrice ? (
                     <div className="font-bold text-slate-900">
@@ -81,12 +83,11 @@ export function PriceTable({ services, whatsapp }: PriceTableProps) {
                     </div>
                   ) : (
                     <span className="text-xs font-medium text-petrol-700 bg-petrol-50 px-2 py-1 rounded">
-                      Sob avaliação
+                      Consulte a clínica
                     </span>
                   )}
                 </td>
 
-                {/* Ação WhatsApp */}
                 <td className="py-4 px-4 sm:px-6 text-center">
                   <a
                     href={waHref}
