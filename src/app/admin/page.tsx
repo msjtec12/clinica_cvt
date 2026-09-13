@@ -8,7 +8,7 @@ import {
   getCampaigns,
   getArticles,
 } from "@/lib/data-service";
-import { AdminDashboard } from "@/components/admin/AdminDashboard";
+import { AdminDashboardV2 } from "@/components/admin/AdminDashboardV2";
 
 export const metadata: Metadata = {
   title: "Painel Administrativo | Gestão da Clínica",
@@ -30,7 +30,7 @@ export default async function AdminPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-      <AdminDashboard
+      <AdminDashboardV2
         initialClinic={clinic}
         initialServices={services}
         initialCategories={categories}
