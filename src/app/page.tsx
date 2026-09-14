@@ -1,357 +1,254 @@
 import React from "react";
 import Link from "next/link";
 import {
+  ArrowRight,
+  BookOpenCheck,
+  CalendarDays,
+  Clock3,
+  HeartPulse,
+  MapPin,
+  MessageCircleQuestion,
+  Navigation,
+  Phone,
+  ShieldCheck,
+  Sparkles,
   Stethoscope,
   Syringe,
-  Microscope,
-  Scissors,
-  Sparkles,
-  AlertOctagon,
-  ArrowRight,
-  ShieldCheck,
-  CheckCircle,
-  MapPin,
-  Clock,
-  Phone,
-  MessageCircle,
-  Navigation,
 } from "lucide-react";
-import {
-  getClinicSettings,
-  getServices,
-  getFaqs,
-} from "@/lib/data-service";
-import { isFilled, formatCurrency } from "@/lib/utils";
+import { getClinicSettings, getServices } from "@/lib/data-service";
+import { isFilled } from "@/lib/utils";
 import { WhatsAppButton } from "@/components/common/WhatsAppButton";
 import { ServiceCard } from "@/components/services/ServiceCard";
-import { TutorGuidanceWizard } from "@/components/faq/TutorGuidanceWizard";
-import { LocationSection } from "@/components/contact/LocationSection";
 
 export default async function HomePage() {
-  const [clinic, allServices, allFaqs] = await Promise.all([
+  const [clinic, services] = await Promise.all([
     getClinicSettings(),
     getServices(),
-    getFaqs(),
   ]);
 
-  // Serviços em destaque direto para o tutor (Consultas, Vacinas, Castração, Banho & Tosa)
-  const topServices = allServices.slice(0, 4);
+  const clinicName = isFilled(clinic.name) ? clinic.name : "Clínica Veterinária";
+  const phoneDigits = isFilled(clinic.phone) ? clinic.phone!.replace(/\D/g, "") : "";
+  const featuredServices = services.slice(0, 3);
 
-  // 6 Atalhos essenciais diretos
-  const shortcuts = [
+  const quickPaths = [
     {
-      label: "Consultas",
-      desc: "Geral e especialidades",
+      title: "Preciso de atendimento",
+      description: "Veja consultas, exames, vacinas e outros serviços disponíveis.",
+      href: "/servicos",
       icon: Stethoscope,
-      href: "/servicos?cat=consultas",
-      color: "bg-blue-50 text-blue-700 border-blue-100",
     },
     {
-      label: "Vacinas",
-      desc: "Cães e gatos",
-      icon: Syringe,
+      title: "Tenho uma dúvida",
+      description: "Pesquise orientações educativas sobre rotina, prevenção e cuidados.",
+      href: "/duvidas",
+      icon: MessageCircleQuestion,
+    },
+    {
+      title: "Quero vacinar meu pet",
+      description: "Consulte informações de vacinação e fale com a clínica.",
       href: "/servicos?cat=vacinas",
-      color: "bg-emerald-50 text-emerald-700 border-emerald-100",
+      icon: Syringe,
     },
     {
-      label: "Castração",
-      desc: "Cirurgia com anestesista",
-      icon: Scissors,
-      href: "/servicos?cat=cirurgias",
-      color: "bg-teal-50 text-teal-700 border-teal-100",
-    },
-    {
-      label: "Banho & Tosa",
-      desc: "Higiene com carinho",
-      icon: Sparkles,
-      href: "/servicos?cat=estetica",
-      color: "bg-purple-50 text-purple-700 border-purple-100",
-    },
-    {
-      label: "Exames",
-      desc: "Sangue e ultrassom",
-      icon: Microscope,
-      href: "/servicos?cat=exames",
-      color: "bg-indigo-50 text-indigo-700 border-indigo-100",
-    },
-    {
-      label: "Urgência",
-      desc: "O que fazer agora",
-      icon: AlertOctagon,
-      href: "/duvidas?cat=urgencia",
-      color: "bg-rose-50 text-rose-700 border-rose-100",
+      title: "Quero ir até a clínica",
+      description: "Confira endereço, horários e opções de contato antes de sair.",
+      href: "/contato",
+      icon: Navigation,
     },
   ];
 
   return (
-    <div className="space-y-8 sm:space-y-12 pb-16 pt-4 sm:pt-6">
-      {/* ========================================================================= */}
-      {/* 1. TOPO OTIMIZADO: CARTÃO ESSENCIAL DIRETO FIEL AO FLYER OFICIAL */}
-      {/* ========================================================================= */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl border border-petrol-200/80 bg-white p-5 sm:p-7 shadow-card space-y-4">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            {/* Identificação da Clínica e Médica Responsável */}
-            <div className="space-y-2">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-petrol-50 text-petrol-900 text-xs font-semibold border border-petrol-100">
-                  <ShieldCheck className="w-3.5 h-3.5 text-petrol-700" />
-                  <span>Dra. Priscila Villanova Nunes • CRMV-SP 19.394</span>
-                </span>
-                <span className="text-xs text-petrol-800 font-semibold italic">
-                  Cuidar é o nosso compromisso! ❤️
-                </span>
-              </div>
+    <div className="pb-20 md:pb-16">
+      <section className="border-b border-slate-200/70 bg-gradient-to-b from-white via-white to-petrol-50/40">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:px-8 lg:py-16">
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-petrol-200 bg-white px-3 py-1.5 text-xs font-semibold text-petrol-800 shadow-subtle">
+              <HeartPulse className="h-4 w-4 text-petrol-700" />
+              Atendimento veterinário com informação clara para o tutor
+            </div>
 
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                Clínica Veterinária Thieres (CVT)
+            <div className="space-y-4">
+              <h1 className="max-w-3xl text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl lg:text-5xl">
+                Cuidado veterinário com uma experiência mais simples para você e seu pet.
               </h1>
+              <p className="max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
+                Consulte serviços, tire dúvidas frequentes, confira horários e fale com a equipe da {clinicName} sem precisar procurar informação em várias páginas.
+              </p>
+            </div>
 
-              <div className="flex flex-wrap items-center gap-y-1.5 gap-x-4 text-xs sm:text-sm text-slate-600">
-                <div className="flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 text-petrol-700 flex-shrink-0" />
-                  <span className="font-medium">Rua Cachoeira do Limão, 10 - casa 2 - Inácio Monteiro</span>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <WhatsAppButton
+                phone={clinic.whatsapp}
+                message={`Olá! Estou no site da ${clinicName} e gostaria de informações sobre atendimento para meu pet.`}
+                variant="primary"
+                size="lg"
+                className="w-full sm:w-auto"
+              >
+                Falar com a clínica
+              </WhatsAppButton>
+
+              <Link
+                href="/servicos"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-subtle transition hover:border-petrol-300 hover:bg-petrol-50 sm:w-auto"
+              >
+                Ver serviços
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+
+            <div className="grid max-w-3xl gap-3 sm:grid-cols-3">
+              <div className="flex items-start gap-2.5 rounded-xl bg-white/80 p-3 text-sm text-slate-600">
+                <Clock3 className="mt-0.5 h-4 w-4 flex-shrink-0 text-petrol-700" />
+                <div>
+                  <span className="block text-xs font-semibold text-slate-900">Horários</span>
+                  <span className="text-xs">{isFilled(clinic.openingHours) ? clinic.openingHours : "Consulte a clínica"}</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-petrol-700 flex-shrink-0" />
-                  <span>Seg a Sex: <strong>9:30h às 17:30h</strong> | Sáb: <strong>9:30h às 14h</strong></span>
+              </div>
+              <div className="flex items-start gap-2.5 rounded-xl bg-white/80 p-3 text-sm text-slate-600">
+                <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-petrol-700" />
+                <div>
+                  <span className="block text-xs font-semibold text-slate-900">Localização</span>
+                  <span className="text-xs">{isFilled(clinic.neighborhood) ? clinic.neighborhood : isFilled(clinic.city) ? clinic.city : "Veja no contato"}</span>
                 </div>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-petrol-100 text-petrol-900">
-                  Atendimento por ordem de chegada
-                </span>
+              </div>
+              <div className="flex items-start gap-2.5 rounded-xl bg-white/80 p-3 text-sm text-slate-600">
+                <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-petrol-700" />
+                <div>
+                  <span className="block text-xs font-semibold text-slate-900">Responsabilidade técnica</span>
+                  <span className="text-xs">{isFilled(clinic.crmv) ? clinic.crmv : "Informação disponível na clínica"}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-petrol-200 bg-white p-5 shadow-hover sm:p-6">
+            <div className="mb-5 flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-petrol-700">Acesso rápido</p>
+                <h2 className="mt-1 text-xl font-bold text-slate-950">O que você precisa hoje?</h2>
+              </div>
+              <div className="rounded-2xl bg-petrol-50 p-3 text-petrol-800">
+                <Sparkles className="h-5 w-5" />
               </div>
             </div>
 
-            {/* Ações Imediatas (WhatsApp, Ligar e Como Chegar) */}
-            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
-              <WhatsAppButton
-                phone={clinic.whatsapp}
-                message="Olá! Gostaria de falar com a recepção da Clínica Veterinária Thieres para confirmar o atendimento."
-                variant="primary"
-                size="md"
-                className="w-full sm:w-auto shadow-sm"
-              >
-                Chamar no WhatsApp
-              </WhatsAppButton>
+            <div className="space-y-2.5">
+              {quickPaths.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.title}
+                    href={item.href}
+                    className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:-translate-y-0.5 hover:border-petrol-300 hover:bg-petrol-50/50 hover:shadow-card"
+                  >
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-petrol-50 text-petrol-800 transition group-hover:bg-petrol-900 group-hover:text-white">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-sm font-bold text-slate-900">{item.title}</h3>
+                      <p className="mt-0.5 text-xs leading-relaxed text-slate-500">{item.description}</p>
+                    </div>
+                    <ArrowRight className="h-4 w-4 flex-shrink-0 text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-petrol-700" />
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
 
-              <a
-                href="tel:1121538100"
-                className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-petrol-50 hover:bg-petrol-100 text-petrol-900 text-xs sm:text-sm font-bold border border-petrol-200 transition-colors w-full sm:w-auto"
-              >
-                <Phone className="w-4 h-4 text-petrol-700" />
-                <span>Ligar: (11) 2153-8100</span>
-              </a>
+      <div className="mx-auto max-w-7xl space-y-14 px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        <section className="space-y-6" aria-labelledby="servicos-home-heading">
+          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+            <div className="max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-petrol-700">Atendimento</p>
+              <h2 id="servicos-home-heading" className="mt-1 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
+                Serviços mais procurados
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                Informações objetivas para você entender como funciona o atendimento antes de falar com a equipe.
+              </p>
+            </div>
+            <Link href="/servicos" className="inline-flex items-center gap-1.5 text-sm font-semibold text-petrol-800 hover:text-petrol-950">
+              Ver todos os serviços
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
 
+          {featuredServices.length > 0 ? (
+            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {featuredServices.map((service) => (
+                <ServiceCard key={service.id} service={service} whatsapp={clinic.whatsapp} />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
+              O catálogo de serviços está sendo atualizado. Fale com a clínica para consultar o atendimento disponível.
+            </div>
+          )}
+        </section>
+
+        <section className="grid gap-5 lg:grid-cols-3">
+          <Link href="/duvidas" className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-subtle transition hover:border-petrol-300 hover:shadow-card lg:col-span-2">
+            <div className="flex items-start gap-4">
+              <div className="rounded-2xl bg-petrol-50 p-3 text-petrol-800">
+                <BookOpenCheck className="h-6 w-6" />
+              </div>
+              <div className="flex-1">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-petrol-700">Central de Dúvidas</p>
+                <h2 className="mt-1 text-xl font-bold text-slate-950">Antes de mandar mensagem, talvez sua dúvida já esteja respondida.</h2>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  Pesquise dúvidas sobre filhotes, alimentação, vacinação, higiene, prevenção, transporte e guarda responsável. Quando o assunto exige avaliação veterinária, o próprio site orienta procurar atendimento.
+                </p>
+                <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-petrol-800 group-hover:text-petrol-950">
+                  Pesquisar uma dúvida <ArrowRight className="h-4 w-4" />
+                </span>
+              </div>
+            </div>
+          </Link>
+
+          <div className="rounded-3xl border border-slate-200 bg-slate-950 p-6 text-white shadow-card">
+            <CalendarDays className="h-6 w-6 text-turquoise-300" />
+            <h2 className="mt-4 text-lg font-bold">Antes de ir até a clínica</h2>
+            <p className="mt-2 text-sm leading-relaxed text-slate-300">
+              Confirme o horário de atendimento e leve carteirinha de vacinação, exames anteriores e informações dos medicamentos em uso, quando houver.
+            </p>
+            <Link href="/contato" className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-turquoise-300 hover:text-white">
+              Ver contato e localização <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </section>
+
+        <section className="overflow-hidden rounded-3xl border border-petrol-200 bg-petrol-50/70">
+          <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div className="max-w-3xl">
+              <div className="flex items-center gap-2 text-sm font-semibold text-petrol-900">
+                <ShieldCheck className="h-5 w-5" />
+                Responsabilidade técnica
+              </div>
+              <h2 className="mt-2 text-xl font-bold text-slate-950 sm:text-2xl">
+                {isFilled(clinic.responsibleVeterinarian) ? clinic.responsibleVeterinarian : "Atendimento médico-veterinário responsável"}
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                {isFilled(clinic.crmv) ? `${clinic.crmv}. ` : ""}As orientações do site têm caráter educativo. Diagnóstico, prescrição, indicação individual de exames e definição de tratamento dependem de avaliação médico-veterinária.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-2 sm:flex-row lg:flex-col">
+              {phoneDigits && (
+                <a href={`tel:${phoneDigits}`} className="inline-flex items-center justify-center gap-2 rounded-xl border border-petrol-200 bg-white px-4 py-2.5 text-sm font-semibold text-petrol-900 hover:bg-petrol-100">
+                  <Phone className="h-4 w-4" />
+                  Ligar para a clínica
+                </a>
+              )}
               {isFilled(clinic.mapsUrl) && (
-                <a
-                  href={clinic.mapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-3 rounded-xl bg-white hover:bg-slate-50 text-petrol-800 text-xs sm:text-sm font-semibold border border-slate-200 transition-colors"
-                  title="Abrir rota no Google Maps"
-                >
-                  <Navigation className="w-4 h-4 text-petrol-700" />
-                  <span>Como Chegar</span>
+                <a href={clinic.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-petrol-200 bg-white px-4 py-2.5 text-sm font-semibold text-petrol-900 hover:bg-petrol-100">
+                  <MapPin className="h-4 w-4" />
+                  Como chegar
                 </a>
               )}
             </div>
           </div>
-
-          {/* Aviso Oficial do Flyer com Fundo Menta */}
-          <div className="bg-petrol-50 border border-petrol-200/80 rounded-2xl p-3 sm:p-4 flex items-center gap-3 text-xs sm:text-sm text-petrol-950">
-            <div className="w-7 h-7 rounded-full bg-petrol-900 text-white flex items-center justify-center font-bold flex-shrink-0 text-xs">
-              !
-            </div>
-            <p className="leading-relaxed">
-              <strong>Aviso aos tutores:</strong> Se possível, <strong>ligue antes</strong> para confirmar o atendimento, pois pode haver alteração no horário.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-14">
-        {/* ========================================================================= */}
-        {/* 2. ATALHOS RÁPIDOS ESSENCIAIS (6 BOTÕES OBJETIVOS) */}
-        {/* ========================================================================= */}
-        <section aria-label="Atalhos rápidos para o tutor">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            {shortcuts.map((sc, i) => {
-              const Icon = sc.icon;
-              return (
-                <Link
-                  key={i}
-                  href={sc.href}
-                  className="flex flex-col items-center text-center p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200/80 shadow-subtle hover:shadow-card hover:border-turquoise-300 transition-all group"
-                >
-                  <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center mb-2 transition-transform group-hover:scale-105 border ${sc.color}`}
-                  >
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <span className="text-xs font-bold text-slate-900 group-hover:text-petrol-900 leading-tight">
-                    {sc.label}
-                  </span>
-                  <span className="text-[10px] text-slate-500 mt-0.5">
-                    {sc.desc}
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 3. ASSISTENTE DE TRIAGEM RÁPIDA: RESPONDE DÚVIDAS & MOSTRA SERVIÇOS/VALORES */}
-        {/* ========================================================================= */}
-        <section aria-labelledby="triagem-heading">
-          <TutorGuidanceWizard clinic={clinic} services={allServices} />
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 4. CATÁLOGO DIRETO: SERVIÇOS MAIS PROCURADOS COM VALORES TRANSPARENTES */}
-        {/* ========================================================================= */}
-        <section aria-labelledby="servicos-heading" className="space-y-5">
-          <div className="flex items-center justify-between border-b border-slate-200/60 pb-3">
-            <div>
-              <h2 id="servicos-heading" className="text-xl font-bold text-slate-900">
-                Serviços Oficiais da Clínica
-              </h2>
-              <p className="text-xs text-slate-500">
-                Valores transparentes e o que está incluso em cada atendimento.
-              </p>
-            </div>
-            <Link
-              href="/servicos"
-              className="text-xs sm:text-sm font-semibold text-petrol-700 hover:text-petrol-900 inline-flex items-center gap-1"
-            >
-              <span>Ver todos ({allServices.length})</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {topServices.map((service) => (
-              <ServiceCard
-                key={service.id}
-                service={service}
-                whatsapp={clinic.whatsapp}
-              />
-            ))}
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 5. RESPONSÁVEL TÉCNICA: DRA. PRISCILA VILLANOVA NUNES (21 ANOS DE EXPERIÊNCIA) */}
-        {/* ========================================================================= */}
-        <section aria-labelledby="veterinaria-heading" className="rounded-3xl border border-teal-100 bg-gradient-to-br from-petrol-50/50 via-white to-turquoise-50/30 p-6 sm:p-8 shadow-card">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-            <div className="lg:col-span-8 space-y-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-turquoise-100 text-turquoise-900 text-xs font-semibold">
-                <ShieldCheck className="w-4 h-4 text-turquoise-700" />
-                <span>Responsável Técnica Oficial</span>
-              </div>
-
-              <h2 id="veterinaria-heading" className="text-xl sm:text-2xl font-bold text-slate-900">
-                Dra. Priscila Villanova Nunes • CRMV-SP 19.394
-              </h2>
-
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Mais de <strong>21 anos cuidando de cães e gatos</strong> com muito carinho em Inácio Monteiro. Formada pela Unicastelo Fernandópolis e <strong>especialista em Anestesiologia Veterinária</strong>, garantindo máxima segurança para castrações e procedimentos.
-              </p>
-
-              <div className="flex flex-wrap gap-2 pt-1 text-xs">
-                <span className="bg-white px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 font-medium">
-                  ✓ 21 anos de prática clínica
-                </span>
-                <span className="bg-white px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 font-medium">
-                  ✓ Especialista em Anestesia & Cirurgia Segura
-                </span>
-                <span className="bg-white px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 font-medium">
-                  ✓ Atendimento amoroso para cães e gatos
-                </span>
-              </div>
-            </div>
-
-            <div className="lg:col-span-4 flex flex-col items-center text-center p-5 bg-white rounded-2xl border border-slate-200 shadow-subtle space-y-2">
-              <div className="w-20 h-20 rounded-full overflow-hidden shadow-md border-2 border-petrol-700 flex-shrink-0">
-                <img
-                  src="/images/dra-priscila-clean.png"
-                  alt="Dra. Priscila Villanova Nunes"
-                  className="w-full h-full object-cover object-top"
-                />
-              </div>
-              <div>
-                <div className="font-bold text-slate-900 text-sm">Dra. Priscila Villanova Nunes</div>
-                <span className="text-[11px] text-slate-500">Médica-Veterinária • CRMV-SP 19.394</span>
-              </div>
-              <WhatsAppButton
-                phone={clinic.whatsapp}
-                message="Olá, Dra. Priscila! Gostaria de agendar uma consulta para o meu pet na Clínica Veterinária Thieres."
-                variant="primary"
-                size="sm"
-                className="w-full text-xs"
-              >
-                Falar com a Dra. Priscila
-              </WhatsAppButton>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 6. ANTES DE SAIR DE CASA: 3 CUIDADOS RÁPIDOS PARA O TUTOR */}
-        {/* ========================================================================= */}
-        <section
-          id="antes-de-vir"
-          aria-labelledby="orientacoes-heading"
-          className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-7 shadow-card space-y-4"
-        >
-          <div className="space-y-1">
-            <h2 id="orientacoes-heading" className="text-lg sm:text-xl font-bold text-slate-900">
-              Antes de sair de casa: 3 cuidados simples para proteger seu pet
-            </h2>
-            <p className="text-xs text-slate-500">
-              Práticas simples que evitam sustos e agilizam o atendimento do seu companheiro.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-xs sm:text-sm">
-            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1.5">
-              <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                <CheckCircle className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                <span>Transporte Seguro</span>
-              </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Cachorros sempre com coleira e guia. Gatos SEMPRE em caixinha de transporte bem fechada.
-              </p>
-            </div>
-
-            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1.5">
-              <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                <CheckCircle className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                <span>Carteirinha & Fotos dos Remédios</span>
-              </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Traga a carteira de vacinação ou tire fotos das caixas de remédios e rações no celular.
-              </p>
-            </div>
-
-            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1.5">
-              <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                <CheckCircle className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                <span>Ficar sem Comer (Jejum)</span>
-              </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Só deixe o pet em jejum se a recepção tiver orientado as horas certas para o exame ou cirurgia.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 7. LOCALIZAÇÃO COM FOTO REAL DA FACHADA E ROTA */}
-        {/* ========================================================================= */}
-        <section aria-labelledby="localizacao-heading">
-          <LocationSection clinic={clinic} />
         </section>
       </div>
     </div>
