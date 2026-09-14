@@ -19,25 +19,32 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function ServicosPage() {
-  const [clinic, categories, services] = await Promise.all([
+interface ServicosPageProps {
+  searchParams: Promise<{ cat?: string | string[] }>;
+}
+
+export default async function ServicosPage({ searchParams }: ServicosPageProps) {
+  const [{ cat }, clinic, categories, services] = await Promise.all([
+    searchParams,
     getClinicSettings(),
     getServiceCategories(),
     getServices(),
   ]);
 
+  const initialCategory = Array.isArray(cat) ? cat[0] : cat;
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-8">
+    <div className="mx-auto max-w-7xl space-y-8 px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
       <div className="max-w-3xl space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-turquoise-50 text-turquoise-800 text-xs font-semibold">
-          <Stethoscope className="w-3.5 h-3.5 text-turquoise-600" />
+        <div className="inline-flex items-center gap-1.5 rounded-full bg-turquoise-50 px-3 py-1 text-xs font-semibold text-turquoise-800">
+          <Stethoscope className="h-3.5 w-3.5 text-turquoise-600" />
           <span>Serviços da clínica</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
+        <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
           Serviços e Condições de Atendimento
         </h1>
-        <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-          Consulte os serviços disponíveis, informações gerais e formas de contato. Quando um procedimento depende de avaliação clínica, a indicação, o preparo e o valor são definidos após avaliação do médico-veterinário e não são apresentados como orçamento fechado no site.
+        <p className="text-sm leading-relaxed text-slate-600 sm:text-base">
+          Consulte os serviços disponíveis, informações gerais e formas de contato. Quando um procedimento depende de avaliação clínica, a indicação, o preparo e o valor são definidos após avaliação do médico-veterinário.
         </p>
       </div>
 
@@ -45,6 +52,7 @@ export default async function ServicosPage() {
         categories={categories}
         services={services}
         clinic={clinic}
+        initialCategory={initialCategory}
       />
 
       <EmergencyNotice clinic={clinic} />
