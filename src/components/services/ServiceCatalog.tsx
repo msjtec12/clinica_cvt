@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { Calendar, Filter, Info, LayoutGrid, Search, Table as TableIcon } from "lucide-react";
 import { ClinicSettings, ServiceCategory, ServiceItem } from "@/types";
 import { formatDate } from "@/lib/utils";
@@ -12,18 +11,22 @@ interface ServiceCatalogProps {
   categories: ServiceCategory[];
   services: ServiceItem[];
   clinic: ClinicSettings;
+  initialCategory?: string;
 }
 
-export function ServiceCatalog({ categories, services, clinic }: ServiceCatalogProps) {
-  const searchParams = useSearchParams();
-  const requestedCategory = searchParams.get("cat");
-  const initialCategory =
-    requestedCategory && categories.some((category) => category.slug === requestedCategory)
-      ? requestedCategory
+export function ServiceCatalog({
+  categories,
+  services,
+  clinic,
+  initialCategory = "all",
+}: ServiceCatalogProps) {
+  const safeInitialCategory =
+    initialCategory !== "all" && categories.some((category) => category.slug === initialCategory)
+      ? initialCategory
       : "all";
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
+  const [selectedCategory, setSelectedCategory] = useState<string>(safeInitialCategory);
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
 
   const filteredServices = useMemo(() => {
