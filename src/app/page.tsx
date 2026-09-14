@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -30,6 +29,20 @@ export default async function HomePage() {
   const clinicName = isFilled(clinic.name) ? clinic.name : "Clínica Veterinária";
   const phoneDigits = isFilled(clinic.phone) ? clinic.phone!.replace(/\D/g, "") : "";
   const featuredServices = services.slice(0, 3);
+  const locationLabel = isFilled(clinic.neighborhood)
+    ? clinic.neighborhood!
+    : isFilled(clinic.city)
+      ? clinic.city!
+      : "Veja no Maps";
+  const locationSearch = [clinic.address, clinic.neighborhood, clinic.city]
+    .filter((value) => typeof value === "string" && value.trim().length > 0)
+    .join(", ");
+  const mapsHref = isFilled(clinic.mapsUrl)
+    ? clinic.mapsUrl!
+    : locationSearch
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationSearch)}`
+      : "/contato";
+  const mapsIsExternal = mapsHref.startsWith("http");
 
   const quickPaths = [
     {
@@ -105,13 +118,25 @@ export default async function HomePage() {
                   <span className="text-xs">{isFilled(clinic.openingHours) ? clinic.openingHours : "Consulte a clínica"}</span>
                 </div>
               </div>
-              <div className="flex items-start gap-2.5 rounded-xl bg-white/80 p-3 text-sm text-slate-600">
+
+              <a
+                href={mapsHref}
+                target={mapsIsExternal ? "_blank" : undefined}
+                rel={mapsIsExternal ? "noopener noreferrer" : undefined}
+                aria-label="Abrir localização da clínica no Google Maps"
+                className="group flex items-start gap-2.5 rounded-xl bg-white/80 p-3 text-sm text-slate-600 transition hover:bg-petrol-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petrol-500"
+              >
                 <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-petrol-700" />
-                <div>
+                <div className="min-w-0 flex-1">
                   <span className="block text-xs font-semibold text-slate-900">Localização</span>
-                  <span className="text-xs">{isFilled(clinic.neighborhood) ? clinic.neighborhood : isFilled(clinic.city) ? clinic.city : "Veja no contato"}</span>
+                  <span className="block text-xs">{locationLabel}</span>
+                  <span className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-petrol-800">
+                    Abrir no Maps
+                    <ArrowRight className="h-3 w-3 transition group-hover:translate-x-0.5" />
+                  </span>
                 </div>
-              </div>
+              </a>
+
               <div className="flex items-start gap-2.5 rounded-xl bg-white/80 p-3 text-sm text-slate-600">
                 <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-petrol-700" />
                 <div>
@@ -124,13 +149,14 @@ export default async function HomePage() {
 
           <div className="rounded-3xl border border-petrol-200 bg-white p-5 shadow-hover sm:p-6">
             <div className="relative mb-5 overflow-hidden rounded-2xl border border-slate-200 bg-petrol-50">
-              <Image
+              <img
                 src="/images/hero-veterinaria.jpg"
                 alt="Ilustração de atendimento veterinário com um cão e um gato"
-                width={900}
-                height={507}
-                priority
-                className="h-40 w-full object-cover object-center sm:h-44"
+                width="900"
+                height="507"
+                loading="eager"
+                decoding="async"
+                className="h-52 w-full object-cover object-[72%_center] sm:h-44 sm:object-center"
               />
               <span className="absolute bottom-2 right-2 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-medium text-slate-600 shadow-sm backdrop-blur">
                 Imagem ilustrativa
@@ -256,8 +282,8 @@ export default async function HomePage() {
                   Ligar para a clínica
                 </a>
               )}
-              {isFilled(clinic.mapsUrl) && (
-                <a href={clinic.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-petrol-200 bg-white px-4 py-2.5 text-sm font-semibold text-petrol-900 hover:bg-petrol-100">
+              {mapsIsExternal && (
+                <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-petrol-200 bg-white px-4 py-2.5 text-sm font-semibold text-petrol-900 hover:bg-petrol-100">
                   <MapPin className="h-4 w-4" />
                   Como chegar
                 </a>
