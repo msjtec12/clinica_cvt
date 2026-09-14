@@ -5,6 +5,7 @@ import { getClinicSettings } from "@/lib/data-service";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingWhatsApp } from "@/components/layout/FloatingWhatsApp";
+import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { isFilled } from "@/lib/utils";
 
 const inter = Inter({
@@ -49,7 +50,6 @@ export default async function RootLayout({
 }) {
   const clinic = await getClinicSettings();
 
-  // Schema.org para Negócio Local / Veterinária usando apenas dados reais verificados
   const schemaData: Record<string, any> = {
     "@context": "https://schema.org",
     "@type": "VeterinaryCare",
@@ -79,11 +79,14 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col font-sans selection:bg-turquoise-100 selection:text-petrol-900">
-        <Header clinic={clinic} />
-        <main className="flex-1">{children}</main>
-        <Footer clinic={clinic} />
+      <body className="min-h-screen bg-[#f7faf5] font-sans text-slate-900 antialiased selection:bg-turquoise-100 selection:text-petrol-900">
+        <div className="flex min-h-screen flex-col">
+          <Header clinic={clinic} />
+          <main className="flex-1">{children}</main>
+          <Footer clinic={clinic} />
+        </div>
         <FloatingWhatsApp phone={clinic.whatsapp} />
+        <MobileBottomNav />
       </body>
     </html>
   );
