@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -122,6 +123,20 @@ export default async function HomePage() {
           </div>
 
           <div className="rounded-3xl border border-petrol-200 bg-white p-5 shadow-hover sm:p-6">
+            <div className="relative mb-5 overflow-hidden rounded-2xl border border-slate-200 bg-petrol-50">
+              <Image
+                src="/images/hero-veterinaria.jpg"
+                alt="Ilustração de atendimento veterinário com um cão e um gato"
+                width={900}
+                height={507}
+                priority
+                className="h-40 w-full object-cover object-center sm:h-44"
+              />
+              <span className="absolute bottom-2 right-2 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-medium text-slate-600 shadow-sm backdrop-blur">
+                Imagem ilustrativa
+              </span>
+            </div>
+
             <div className="mb-5 flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-petrol-700">Acesso rápido</p>
