@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import { Search, LayoutGrid, Table as TableIcon, Calendar, Info, Filter } from "lucide-react";
-import { ServiceCategory, ServiceItem, ClinicSettings } from "@/types";
+import React, { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Calendar, Filter, Info, LayoutGrid, Search, Table as TableIcon } from "lucide-react";
+import { ClinicSettings, ServiceCategory, ServiceItem } from "@/types";
 import { formatDate } from "@/lib/utils";
 import { ServiceCard } from "./ServiceCard";
 import { PriceTable } from "./PriceTable";
@@ -14,19 +15,26 @@ interface ServiceCatalogProps {
 }
 
 export function ServiceCatalog({ categories, services, clinic }: ServiceCatalogProps) {
+  const searchParams = useSearchParams();
+  const requestedCategory = searchParams.get("cat");
+  const initialCategory =
+    requestedCategory && categories.some((category) => category.slug === requestedCategory)
+      ? requestedCategory
+      : "all";
+
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
 
-  // Filtragem combinada por busca e categoria
   const filteredServices = useMemo(() => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+
     return services.filter((service) => {
       const matchesSearch =
-        service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        service.shortDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        service.includedItems.some((item) =>
-          item.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+        normalizedSearch.length === 0 ||
+        service.name.toLowerCase().includes(normalizedSearch) ||
+        service.shortDescription.toLowerCase().includes(normalizedSearch) ||
+        service.includedItems.some((item) => item.toLowerCase().includes(normalizedSearch));
 
       const matchesCategory =
         selectedCategory === "all" || service.categorySlug === selectedCategory;
@@ -35,103 +43,104 @@ export function ServiceCatalog({ categories, services, clinic }: ServiceCatalogP
     });
   }, [services, searchTerm, selectedCategory]);
 
+  const selectCategory = (slug: string) => {
+    setSelectedCategory(slug);
+    setSearchTerm("");
+  };
+
   return (
     <div className="space-y-6">
-      {/* Barra de Aviso de Revisão e Política de Preços */}
-      <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 sm:p-5 text-xs sm:text-sm text-slate-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="flex flex-col gap-3 rounded-2xl border border-slate-200/80 bg-slate-50 p-4 text-xs text-slate-700 sm:flex-row sm:items-center sm:justify-between sm:p-5 sm:text-sm">
         <div className="flex items-start gap-3">
-          <Info className="w-5 h-5 text-petrol-700 flex-shrink-0 mt-0.5" />
+          <Info className="mt-0.5 h-5 w-5 flex-shrink-0 text-petrol-700" />
           <p className="leading-relaxed">
             {clinic.priceDisclaimer ||
-              "Valores podem variar caso haja necessidade de exames, medicamentos ou materiais adicionais prescritos durante a avaliação."}
+              "Alguns atendimentos dependem de avaliação médico-veterinária antes da definição de conduta, preparo e valor."}
           </p>
         </div>
         {clinic.lastPriceReviewDate && (
-          <div className="flex items-center gap-1.5 text-xs text-slate-500 whitespace-nowrap bg-white px-3 py-1.5 rounded-lg border border-slate-200 flex-shrink-0">
-            <Calendar className="w-3.5 h-3.5 text-slate-400" />
-            <span>Última atualização: {formatDate(clinic.lastPriceReviewDate)}</span>
+          <div className="flex flex-shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-500">
+            <Calendar className="h-3.5 w-3.5 text-slate-400" />
+            <span>Atualizado em {formatDate(clinic.lastPriceReviewDate)}</span>
           </div>
         )}
       </div>
 
-      {/* Controles de Busca, Filtros e Alternância de Visualização */}
-      <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
-        {/* Campo de Busca */}
-        <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="relative max-w-lg flex-1">
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <input
-            type="text"
+            type="search"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Buscar por consulta, vacina, exame ou cirurgia..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-petrol-600 focus:border-transparent transition-all shadow-subtle"
-            aria-label="Buscar serviço pelo nome ou descrição"
+            placeholder="Busque por consulta, vacina, exame..."
+            className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-14 text-sm text-slate-900 shadow-subtle outline-none transition placeholder:text-slate-400 focus:border-petrol-500 focus:ring-2 focus:ring-petrol-200"
+            aria-label="Buscar serviço"
           />
           {searchTerm && (
             <button
+              type="button"
               onClick={() => setSearchTerm("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-400 hover:text-slate-700"
             >
               Limpar
             </button>
           )}
         </div>
 
-        {/* Botões de Alternância Cards / Tabela */}
-        <div className="flex items-center gap-2 self-end md:self-auto">
-          <span className="text-xs text-slate-500 hidden sm:inline">Visualização:</span>
-          <div className="inline-flex rounded-xl p-1 bg-slate-100 border border-slate-200">
+        <div className="hidden items-center gap-2 sm:flex">
+          <span className="text-xs text-slate-500">Visualização</span>
+          <div className="inline-flex rounded-xl border border-slate-200 bg-slate-100 p-1">
             <button
+              type="button"
               onClick={() => setViewMode("cards")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                viewMode === "cards"
-                  ? "bg-white text-petrol-900 shadow-sm font-semibold"
-                  : "text-slate-600 hover:text-slate-900"
+              className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition ${
+                viewMode === "cards" ? "bg-white font-semibold text-petrol-900 shadow-sm" : "text-slate-600"
               }`}
-              aria-label="Ver em cartões"
+              aria-label="Ver serviços em cartões"
             >
-              <LayoutGrid className="w-3.5 h-3.5" />
-              <span>Cartões</span>
+              <LayoutGrid className="h-3.5 w-3.5" /> Cartões
             </button>
             <button
+              type="button"
               onClick={() => setViewMode("table")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                viewMode === "table"
-                  ? "bg-white text-petrol-900 shadow-sm font-semibold"
-                  : "text-slate-600 hover:text-slate-900"
+              className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition ${
+                viewMode === "table" ? "bg-white font-semibold text-petrol-900 shadow-sm" : "text-slate-600"
               }`}
-              aria-label="Ver em tabela"
+              aria-label="Ver serviços em tabela"
             >
-              <TableIcon className="w-3.5 h-3.5" />
-              <span>Tabela</span>
+              <TableIcon className="h-3.5 w-3.5" /> Tabela
             </button>
           </div>
         </div>
       </div>
 
-      {/* Pílulas de Categorias */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" aria-label="Filtrar serviços por categoria">
         <button
-          onClick={() => setSelectedCategory("all")}
-          className={`px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+          type="button"
+          onClick={() => selectCategory("all")}
+          className={`whitespace-nowrap rounded-full px-3.5 py-2 text-xs font-medium transition-colors ${
             selectedCategory === "all"
               ? "bg-petrol-900 text-white shadow-sm"
-              : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
+              : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
           }`}
         >
-          Todos os Serviços ({services.length})
+          Todos ({services.length})
         </button>
 
         {categories.map((category) => {
-          const count = services.filter((s) => s.categorySlug === category.slug).length;
+          const count = services.filter((service) => service.categorySlug === category.slug).length;
+          if (count === 0) return null;
+
           return (
             <button
+              type="button"
               key={category.id}
-              onClick={() => setSelectedCategory(category.slug)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+              onClick={() => selectCategory(category.slug)}
+              className={`whitespace-nowrap rounded-full px-3.5 py-2 text-xs font-medium transition-colors ${
                 selectedCategory === category.slug
                   ? "bg-petrol-900 text-white shadow-sm"
-                  : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
+                  : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
               }`}
             >
               {category.name} ({count})
@@ -140,41 +149,32 @@ export function ServiceCatalog({ categories, services, clinic }: ServiceCatalogP
         })}
       </div>
 
-      {/* Exibição dos Serviços ou Mensagem Vazia */}
       {filteredServices.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center">
-          <Filter className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-          <h4 className="text-base font-semibold text-slate-800">
-            Nenhum serviço encontrado
-          </h4>
-          <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto mt-1">
-            Não encontramos nenhum item para a busca &ldquo;{searchTerm}&rdquo; na categoria selecionada. Você pode consultar nossa equipe diretamente pelo WhatsApp.
+        <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center">
+          <Filter className="mx-auto mb-3 h-9 w-9 text-slate-300" />
+          <h3 className="font-semibold text-slate-900">Nenhum serviço encontrado</h3>
+          <p className="mx-auto mt-1 max-w-md text-sm text-slate-500">
+            Tente outra palavra ou limpe os filtros para visualizar todo o catálogo.
           </p>
           <button
+            type="button"
             onClick={() => {
               setSearchTerm("");
               setSelectedCategory("all");
             }}
-            className="mt-4 text-xs font-medium text-petrol-700 hover:underline"
+            className="mt-4 text-sm font-semibold text-petrol-800 hover:text-petrol-950"
           >
-            Limpar filtros de busca
+            Limpar busca e filtros
           </button>
         </div>
       ) : viewMode === "cards" ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {filteredServices.map((service) => (
-            <ServiceCard
-              key={service.id}
-              service={service}
-              whatsapp={clinic.whatsapp}
-            />
+            <ServiceCard key={service.id} service={service} whatsapp={clinic.whatsapp} />
           ))}
         </div>
       ) : (
-        <PriceTable
-          services={filteredServices}
-          whatsapp={clinic.whatsapp}
-        />
+        <PriceTable services={filteredServices} whatsapp={clinic.whatsapp} />
       )}
     </div>
   );
