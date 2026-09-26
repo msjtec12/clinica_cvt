@@ -29,22 +29,22 @@ export function Footer({ clinic }: FooterProps) {
               )}
               <div>
                 <div className="font-bold text-white">{clinicName}</div>
-                <div className="text-xs text-slate-400">Cuidado e saúde animal</div>
+                <div className="text-sm text-slate-200">Cuidado e saúde animal</div>
               </div>
             </Link>
 
-            <p className="max-w-xl text-sm leading-relaxed text-slate-400">
+            <p className="max-w-xl text-sm leading-relaxed text-slate-200">
               {isFilled(clinic.shortDescription)
                 ? clinic.shortDescription
                 : "Informações claras sobre atendimento, serviços e cuidados para facilitar a rotina dos tutores."}
             </p>
 
             {(isFilled(clinic.responsibleVeterinarian) || isFilled(clinic.crmv)) && (
-              <div className="inline-flex items-start gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-xs">
+              <div className="inline-flex items-start gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-sm">
                 <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-turquoise-300" />
                 <div>
                   <span className="block font-semibold text-white">Responsabilidade técnica</span>
-                  <span className="text-slate-400">
+                  <span className="text-slate-200">
                     {isFilled(clinic.responsibleVeterinarian) ? clinic.responsibleVeterinarian : "Médico-veterinário responsável"}
                     {isFilled(clinic.crmv) ? ` • ${clinic.crmv}` : ""}
                   </span>
@@ -54,8 +54,8 @@ export function Footer({ clinic }: FooterProps) {
           </div>
 
           <div>
-            <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-white">Navegação</h2>
-            <ul className="mt-4 space-y-2.5 text-sm text-slate-400">
+            <h2 className="text-sm font-semibold uppercase tracking-[0.14em] text-white">Navegação</h2>
+            <ul className="mt-4 space-y-2.5 text-sm text-slate-200">
               <li><Link href="/servicos" className="hover:text-white">Serviços</Link></li>
               <li><Link href="/duvidas" className="hover:text-white">Central de Dúvidas</Link></li>
               <li><Link href="/campanhas" className="hover:text-white">Campanhas</Link></li>
@@ -65,8 +65,8 @@ export function Footer({ clinic }: FooterProps) {
           </div>
 
           <div>
-            <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-white">Atendimento</h2>
-            <ul className="mt-4 space-y-3 text-sm text-slate-400">
+            <h2 className="text-sm font-semibold uppercase tracking-[0.14em] text-white">Atendimento</h2>
+            <ul className="mt-4 space-y-3 text-sm text-slate-200">
               {isFilled(clinic.openingHours) && (
                 <li className="flex items-start gap-2"><Clock className="mt-0.5 h-4 w-4 flex-shrink-0 text-turquoise-300"/><span>{clinic.openingHours}</span></li>
               )}
@@ -86,7 +86,7 @@ export function Footer({ clinic }: FooterProps) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 py-5 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 py-5 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} {clinicName}. Todos os direitos reservados.</p>
           <p className="max-w-2xl sm:text-right">
             Conteúdo educativo não substitui avaliação, diagnóstico ou prescrição médico-veterinária.

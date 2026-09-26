@@ -15,7 +15,9 @@ export function MobileBottomNav() {
   const pathname = usePathname();
 
   const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+    href === "/"
+      ? pathname === "/"
+      : pathname === href || pathname.startsWith(`${href}/`);
 
   if (pathname.startsWith("/admin")) return null;
 
@@ -33,11 +35,15 @@ export function MobileBottomNav() {
               key={item.href}
               href={item.href}
               aria-current={active ? "page" : undefined}
-              className={`flex min-h-[58px] flex-col items-center justify-center gap-1 rounded-lg px-1 text-[10px] font-semibold transition-colors ${
-                active ? "text-petrol-900" : "text-slate-500 hover:text-slate-800"
+              className={`flex min-h-[64px] flex-col items-center justify-center gap-1 rounded-lg px-1 text-sm font-semibold transition-colors ${
+                active
+                  ? "text-petrol-900"
+                  : "text-slate-700 hover:text-slate-900"
               }`}
             >
-              <Icon className={`h-5 w-5 ${active ? "text-petrol-800" : "text-slate-400"}`} />
+              <Icon
+                className={`h-5 w-5 ${active ? "text-petrol-800" : "text-slate-400"}`}
+              />
               <span>{item.label}</span>
             </Link>
           );

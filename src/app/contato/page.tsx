@@ -31,7 +31,8 @@ export default async function ContatoPage() {
           Fale Conosco e Encontre a Clínica
         </h1>
         <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-          Estamos prontos para atender você e seu pet. Utilize o WhatsApp para agendamentos rápidos ou consulte nossos dados e formulário abaixo.
+          Fale com a equipe pelo WhatsApp ou telefone. Confira o endereço e os
+          horários antes de sair de casa.
         </p>
       </div>
 
@@ -42,7 +43,7 @@ export default async function ContatoPage() {
         </div>
 
         <div className="lg:col-span-6 space-y-6">
-          <ContactForm />
+          <ContactForm phone={clinic.whatsapp} />
         </div>
       </div>
 
