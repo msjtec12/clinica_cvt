@@ -86,15 +86,15 @@ export default async function HomePage() {
           </div>
           <figure className="hidden lg:block">
             <img
-              src="/images/hero-veterinaria.jpg"
-              alt="Ilustração de atendimento veterinário com um cão e um gato"
+              src="/images/fachada-cvt.png"
+              alt="Fachada da Clínica Veterinária Thieres em Inácio Monteiro"
               width="900"
               height="507"
               className="aspect-[4/3] w-full rounded-2xl object-cover"
               fetchPriority="high"
             />
             <figcaption className="mt-3 text-sm text-slate-600">
-              Cuidado e saúde animal. Imagem ilustrativa.
+              Esta é a fachada da clínica para você reconhecer ao chegar.
             </figcaption>
           </figure>
         </div>
