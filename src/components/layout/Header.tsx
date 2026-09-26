@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HeartPulse, Menu } from "lucide-react";
@@ -25,16 +25,21 @@ const navLinks = [
 export function Header({ clinic }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-  const clinicName = isFilled(clinic.name) ? clinic.name : "Clínica Veterinária";
+  const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), []);
+  const clinicName = isFilled(clinic.name)
+    ? clinic.name
+    : "Clínica Veterinária";
 
   const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+    href === "/"
+      ? pathname === "/"
+      : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <>
       <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/95 shadow-subtle backdrop-blur-xl">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between gap-4 sm:h-[72px]">
+          <div className="flex min-h-16 py-2 items-center justify-between gap-4 sm:h-[72px]">
             <Link
               href="/"
               className="group flex min-w-0 items-center gap-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-petrol-600"
@@ -42,7 +47,11 @@ export function Header({ clinic }: HeaderProps) {
             >
               {isFilled(clinic.logo) ? (
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white sm:h-11 sm:w-11">
-                  <img src={clinic.logo} alt={clinicName} className="h-full w-full object-contain p-1" />
+                  <img
+                    src={clinic.logo}
+                    alt={clinicName}
+                    className="h-full w-full object-contain p-1"
+                  />
                 </div>
               ) : (
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-petrol-900 text-white shadow-subtle sm:h-11 sm:w-11">
@@ -50,7 +59,7 @@ export function Header({ clinic }: HeaderProps) {
                 </div>
               )}
               <div className="min-w-0">
-                <span className="block truncate text-sm font-bold leading-tight text-slate-950 sm:text-base">
+                <span className="block text-sm font-bold leading-tight text-slate-950 sm:text-base">
                   {clinicName}
                 </span>
                 <span className="hidden text-[11px] font-medium text-slate-500 sm:block">
@@ -59,7 +68,10 @@ export function Header({ clinic }: HeaderProps) {
               </div>
             </Link>
 
-            <nav className="hidden items-center gap-1 lg:flex" aria-label="Navegação principal">
+            <nav
+              className="hidden items-center gap-1 lg:flex"
+              aria-label="Navegação principal"
+            >
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -90,11 +102,12 @@ export function Header({ clinic }: HeaderProps) {
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(true)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-petrol-600 lg:hidden"
+                className="inline-flex min-h-12 items-center gap-2 px-3 justify-center rounded-xl border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-petrol-600 lg:hidden"
                 aria-label="Abrir menu de navegação"
                 aria-expanded={mobileMenuOpen}
               >
-                <Menu className="h-5 w-5" />
+                <Menu aria-hidden="true" className="h-5 w-5" />
+                <span className="text-base font-semibold">Menu</span>
               </button>
             </div>
           </div>
@@ -103,7 +116,7 @@ export function Header({ clinic }: HeaderProps) {
 
       <MobileMenu
         isOpen={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
+        onClose={closeMobileMenu}
         clinic={clinic}
         links={navLinks}
       />

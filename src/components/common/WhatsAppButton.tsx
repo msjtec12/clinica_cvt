@@ -27,14 +27,14 @@ export function WhatsAppButton({
     "inline-flex items-center justify-center font-medium rounded-lg transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
 
   const sizeStyles = {
-    sm: "text-xs px-3 py-1.5 gap-1.5",
-    md: "text-sm px-4 py-2.5 gap-2",
-    lg: "text-base px-6 py-3 gap-2.5 shadow-sm",
+    sm: "min-h-12 text-base px-4 py-3 gap-2",
+    md: "min-h-12 text-base px-4 py-3 gap-2",
+    lg: "min-h-14 text-base px-6 py-3 gap-2.5 shadow-sm",
   };
 
   const variantStyles = {
     primary:
-      "bg-emerald-600 hover:bg-emerald-700 text-white focus:ring-emerald-500 shadow-sm hover:shadow",
+      "bg-emerald-700 hover:bg-emerald-800 text-white focus:ring-emerald-500 shadow-sm hover:shadow",
     secondary:
       "bg-petrol-900 hover:bg-petrol-800 text-white focus:ring-petrol-700 shadow-sm",
     coral:
@@ -46,12 +46,16 @@ export function WhatsAppButton({
   return (
     <a
       href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={cn(baseStyles, sizeStyles[size], variantStyles[variant], className)}
-      aria-label="Iniciar conversa com a clínica pelo WhatsApp"
+      className={cn(
+        baseStyles,
+        sizeStyles[size],
+        variantStyles[variant],
+        className,
+      )}
     >
-      {showIcon && <MessageCircle className={size === "sm" ? "w-3.5 h-3.5" : "w-4 h-4"} />}
+      {showIcon && (
+        <MessageCircle className={size === "sm" ? "w-3.5 h-3.5" : "w-4 h-4"} />
+      )}
       <span>{children}</span>
     </a>
   );

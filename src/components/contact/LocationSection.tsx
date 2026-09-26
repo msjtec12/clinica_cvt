@@ -34,7 +34,7 @@ export function LocationSection({ clinic }: LocationSectionProps) {
         <h3 className="text-xl font-bold text-slate-900">
           Informações de Localização e Atendimento
         </h3>
-        <p className="text-xs text-slate-500 mt-1">
+        <p className="text-base text-slate-500 mt-1">
           Fácil acesso em Inácio Monteiro, com identificação visual na esquina.
         </p>
       </div>
@@ -46,12 +46,14 @@ export function LocationSection({ clinic }: LocationSectionProps) {
           alt="Fachada da Clínica Veterinária Thieres (CVT) em Inácio Monteiro"
           className="w-full h-60 sm:h-72 md:h-80 object-cover object-center group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-200/80 shadow-md flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-900">
+        <div className="bg-white px-3.5 py-3 flex flex-wrap gap-3 items-center justify-between">
+          <div className="flex items-center gap-2 text-base font-semibold text-slate-900">
             <span className="text-amber-500">★★★★★</span>
             <span>4,8 no Google (322 avaliações)</span>
           </div>
-          <span className="text-[11px] text-petrol-900 font-bold bg-petrol-50 border border-petrol-100 px-2.5 py-0.5 rounded-full">Fachada na Esquina</span>
+          <span className="text-sm text-petrol-900 font-bold bg-petrol-50 border border-petrol-100 px-2.5 py-0.5 rounded-full">
+            Fachada na Esquina
+          </span>
         </div>
       </div>
 
@@ -62,18 +64,20 @@ export function LocationSection({ clinic }: LocationSectionProps) {
             <MapPin className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+            <span className="text-base font-semibold text-slate-600 uppercase tracking-wider block">
               Endereço Completo
             </span>
             <span className="font-medium text-slate-900 block mt-0.5">
-              {hasAddress ? clinic.address : "Consulte nosso endereço na recepção"}
+              {hasAddress
+                ? clinic.address
+                : "Consulte nosso endereço na recepção"}
             </span>
             {hasMaps && (
               <a
                 href={clinic.mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-petrol-700 hover:text-petrol-900 mt-1.5 underline"
+                className="inline-flex items-center gap-1.5 text-base font-semibold text-petrol-700 hover:text-petrol-900 mt-1.5 underline"
               >
                 <Navigation className="w-3.5 h-3.5" />
                 Como chegar (abrir no Google Maps)
@@ -88,20 +92,25 @@ export function LocationSection({ clinic }: LocationSectionProps) {
             <Clock className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+            <span className="text-base font-semibold text-slate-600 uppercase tracking-wider block">
               Horário de Funcionamento
             </span>
             <span className="font-medium text-slate-900 block mt-0.5">
-              {hasHours ? clinic.openingHours : "Consulte os horários da recepção"}
+              {hasHours
+                ? clinic.openingHours
+                : "Consulte os horários da recepção"}
             </span>
-            <span className="text-xs font-semibold text-petrol-800 block mt-0.5">
+            <span className="text-base font-semibold text-petrol-800 block mt-0.5">
               Atendimento por ordem de chegada
             </span>
-            <div className="mt-2 bg-petrol-50 border border-petrol-200/80 rounded-xl p-2.5 flex items-center gap-2 text-xs text-petrol-950">
+            <div className="mt-2 bg-petrol-50 border border-petrol-200/80 rounded-xl p-2.5 flex items-center gap-2 text-base text-petrol-950">
               <span className="w-4 h-4 rounded-full bg-petrol-900 text-white flex items-center justify-center font-bold text-[9px] flex-shrink-0">
                 !
               </span>
-              <span>Se possível, <strong>ligue antes</strong> para confirmar o atendimento.</span>
+              <span>
+                Se possível, <strong>ligue antes</strong> para confirmar o
+                atendimento.
+              </span>
             </div>
           </div>
         </div>
@@ -112,7 +121,7 @@ export function LocationSection({ clinic }: LocationSectionProps) {
             <Phone className="w-5 h-5" />
           </div>
           <div className="space-y-1">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+            <span className="text-base font-semibold text-slate-600 uppercase tracking-wider block">
               Canais Diretos
             </span>
             <div className="flex flex-col gap-1">
@@ -126,7 +135,7 @@ export function LocationSection({ clinic }: LocationSectionProps) {
                 Conversar pelo WhatsApp
               </WhatsAppButton>
 
-              <div className="flex flex-col gap-0.5 text-xs text-slate-700 font-medium pt-1">
+              <div className="flex flex-col gap-0.5 text-base text-slate-700 font-medium pt-1">
                 <a
                   href="tel:1121538100"
                   className="hover:text-petrol-800 transition-colors inline-flex items-center gap-1"
@@ -144,7 +153,7 @@ export function LocationSection({ clinic }: LocationSectionProps) {
               {hasEmail && (
                 <a
                   href={`mailto:${clinic.email}`}
-                  className="text-xs text-slate-500 hover:text-slate-700"
+                  className="text-base text-slate-500 hover:text-slate-700"
                 >
                   E-mail: {clinic.email}
                 </a>
@@ -155,7 +164,7 @@ export function LocationSection({ clinic }: LocationSectionProps) {
 
         {/* Formas de Pagamento e Espécies */}
         {(hasPayment || hasSpecies) && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-slate-100 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-slate-100 text-base">
             {hasPayment && (
               <div className="bg-slate-50 p-3 rounded-xl">
                 <div className="flex items-center gap-1.5 font-semibold text-slate-700 mb-1">
@@ -180,8 +189,10 @@ export function LocationSection({ clinic }: LocationSectionProps) {
 
         {/* Redes Sociais */}
         {hasInstagram && (
-          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span className="text-slate-500">Acompanhe novidades no Instagram:</span>
+          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-base">
+            <span className="text-slate-500">
+              Acompanhe novidades no Instagram:
+            </span>
             <a
               href={`https://instagram.com/${clinic.instagram!.replace("@", "")}`}
               target="_blank"

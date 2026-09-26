@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronRight, HeartPulse, Phone, X } from "lucide-react";
@@ -15,9 +15,17 @@ interface MobileMenuProps {
   links: { href: string; label: string }[];
 }
 
-export function MobileMenu({ isOpen, onClose, clinic, links }: MobileMenuProps) {
+export function MobileMenu({
+  isOpen,
+  onClose,
+  clinic,
+  links,
+}: MobileMenuProps) {
   const pathname = usePathname();
-  const clinicName = isFilled(clinic.name) ? clinic.name : "Clínica Veterinária";
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const clinicName = isFilled(clinic.name)
+    ? clinic.name
+    : "Clínica Veterinária";
 
   useEffect(() => {
     onClose();
@@ -32,14 +40,51 @@ export function MobileMenu({ isOpen, onClose, clinic, links }: MobileMenuProps) 
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    const getControls = () =>
+      Array.from(
+        dialogRef.current?.querySelectorAll<HTMLElement>(
+          "a[href], button:not([disabled])",
+        ) ?? [],
+      );
+    getControls()[0]?.focus();
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+      }
+      if (event.key !== "Tab") return;
+      const controls = getControls();
+      const first = controls[0],
+        last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("keydown", handleKey);
+      previousFocus?.focus();
+    };
+  }, [isOpen, onClose]);
+
   const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+    href === "/"
+      ? pathname === "/"
+      : pathname === href || pathname.startsWith(`${href}/`);
 
   if (!isOpen) return null;
 
   return (
     <div
       className="fixed inset-0 z-50 flex flex-col bg-white lg:hidden"
+      ref={dialogRef}
       role="dialog"
       aria-modal="true"
       aria-label="Menu principal"
@@ -50,23 +95,28 @@ export function MobileMenu({ isOpen, onClose, clinic, links }: MobileMenuProps) 
             <HeartPulse className="h-5 w-5 text-turquoise-300" />
           </div>
           <div className="min-w-0">
-            <span className="block truncate text-sm font-bold text-slate-950">{clinicName}</span>
-            <span className="text-[11px] text-slate-500">Menu de navegação</span>
+            <span className="block truncate text-sm font-bold text-slate-950">
+              {clinicName}
+            </span>
+            <span className="text-sm text-slate-500">Menu de navegação</span>
           </div>
         </Link>
 
         <button
           type="button"
           onClick={onClose}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:bg-slate-50"
+          className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:bg-slate-50"
           aria-label="Fechar menu de navegação"
         >
           <X className="h-5 w-5" />
         </button>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-4 py-5" aria-label="Navegação móvel">
-        <p className="px-2 pb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">
+      <nav
+        className="flex-1 overflow-y-auto px-4 py-5"
+        aria-label="Navegação móvel"
+      >
+        <p className="px-2 pb-2 text-sm font-semibold uppercase tracking-[0.14em] text-slate-600">
           Navegar
         </p>
         <div className="space-y-1">
@@ -74,6 +124,7 @@ export function MobileMenu({ isOpen, onClose, clinic, links }: MobileMenuProps) 
             <Link
               key={link.href}
               href={link.href}
+              onClick={onClose}
               aria-current={isActive(link.href) ? "page" : undefined}
               className={`flex items-center justify-between rounded-xl px-4 py-3.5 text-[15px] font-medium transition-colors ${
                 isActive(link.href)
@@ -82,17 +133,25 @@ export function MobileMenu({ isOpen, onClose, clinic, links }: MobileMenuProps) 
               }`}
             >
               <span>{link.label}</span>
-              <ChevronRight className={`h-4 w-4 ${isActive(link.href) ? "text-petrol-700" : "text-slate-300"}`} />
+              <ChevronRight
+                className={`h-4 w-4 ${isActive(link.href) ? "text-petrol-700" : "text-slate-300"}`}
+              />
             </Link>
           ))}
         </div>
 
         <div className="mx-2 mt-6 rounded-2xl border border-petrol-100 bg-petrol-50/70 p-4">
-          <p className="text-xs font-semibold text-petrol-950">Não sabe por onde começar?</p>
-          <p className="mt-1 text-xs leading-relaxed text-petrol-900/70">
-            Use a Central de Dúvidas para orientações gerais ou fale com a clínica para questões sobre atendimento.
+          <p className="text-base font-semibold text-petrol-950">
+            Não sabe por onde começar?
           </p>
-          <Link href="/duvidas" className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-petrol-800">
+          <p className="mt-1 text-base leading-relaxed text-petrol-900/70">
+            Use a Central de Dúvidas para orientações gerais ou fale com a
+            clínica para questões sobre atendimento.
+          </p>
+          <Link
+            href="/duvidas"
+            className="mt-3 inline-flex items-center gap-1 text-base font-bold text-petrol-800"
+          >
             Abrir Central de Dúvidas <ChevronRight className="h-3.5 w-3.5" />
           </Link>
         </div>

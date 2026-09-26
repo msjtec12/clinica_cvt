@@ -54,7 +54,9 @@ export default async function RootLayout({
     "@context": "https://schema.org",
     "@type": "VeterinaryCare",
     name: isFilled(clinic.name) ? clinic.name : "Clínica Veterinária",
-    description: isFilled(clinic.shortDescription) ? clinic.shortDescription : undefined,
+    description: isFilled(clinic.shortDescription)
+      ? clinic.shortDescription
+      : undefined,
     telephone: isFilled(clinic.phone) ? clinic.phone : undefined,
   };
 
@@ -80,9 +82,14 @@ export default async function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-[#f7faf5] font-sans text-slate-900 antialiased selection:bg-turquoise-100 selection:text-petrol-900">
+        <a href="#conteudo" className="skip-link">
+          Ir para o conteúdo
+        </a>
         <div className="flex min-h-screen flex-col">
           <Header clinic={clinic} />
-          <main className="flex-1">{children}</main>
+          <main id="conteudo" tabIndex={-1} className="flex-1 pb-24 md:pb-0">
+            {children}
+          </main>
           <Footer clinic={clinic} />
         </div>
         <FloatingWhatsApp phone={clinic.whatsapp} />
