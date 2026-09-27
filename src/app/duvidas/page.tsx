@@ -1,131 +1,102 @@
-import React from "react";
-import { Metadata } from "next";
-import { BookOpenCheck, ExternalLink, HelpCircle, ShieldCheck } from "lucide-react";
 import { getClinicSettings, getFaqs } from "@/lib/data-service";
 import { FAQSearch } from "@/components/faq/FAQSearch";
-import { TutorQuestionFinder } from "@/components/faq/TutorQuestionFinder";
-import { EmergencyNotice } from "@/components/common/EmergencyNotice";
-import { WhatsAppButton } from "@/components/common/WhatsAppButton";
 import { tutorEducationFaqs } from "@/data/tutorEducationData";
-import { isFilled } from "@/lib/utils";
-
-export async function generateMetadata(): Promise<Metadata> {
-  const clinic = await getClinicSettings();
-  const name = isFilled(clinic.name) ? clinic.name : "Clínica Veterinária";
-  return {
-    title: "Central de Dúvidas dos Tutores",
-    description: `Encontre orientações educativas sobre primeiros cuidados, alimentação, vacinação, higiene, prevenção, transporte, castração e guarda responsável em ${name}.`,
-  };
-}
-
+import { libraryFaqs } from "@/data/libraryFaqs";
+import { routineFaqs } from "@/data/routineFaqs";
+import { WhatsAppButton } from "@/components/common/WhatsAppButton";
+export const metadata = {
+  title: "Dúvidas e cuidados com seu pet",
+  description:
+    "Respostas rápidas sobre atendimento, horários, pagamentos, vacinas, alimentação e cuidados com cães e gatos.",
+};
 export default async function DuvidasPage() {
-  const [clinic, clinicFaqs] = await Promise.all([
-    getClinicSettings(),
-    getFaqs(),
-  ]);
-
-  const allFaqs = [...clinicFaqs, ...tutorEducationFaqs].filter(
-    (item, index, array) =>
-      array.findIndex(
-        (candidate) =>
-          candidate.id === item.id ||
-          candidate.question.toLowerCase() === item.question.toLowerCase()
-      ) === index
+  const [clinic, custom] = await Promise.all([getClinicSettings(), getFaqs()]);
+  const administrative = routineFaqs(clinic);
+  // Current settings take precedence over generic fallback answers for these topics.
+  const replaced = new Set(["faq-1", "faq-3", "faq-5", "faq-10"]);
+  const faqs = [
+    ...administrative,
+    ...custom.filter((f) => !replaced.has(f.id)),
+    ...libraryFaqs,
+    ...tutorEducationFaqs,
+  ].filter(
+    (f, i, all) =>
+      f.isActive &&
+      all.findIndex(
+        (other) =>
+          other.id === f.id ||
+          other.question.toLowerCase() === f.question.toLowerCase(),
+      ) === i,
   );
-
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-12">
-      <div className="text-center max-w-3xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-turquoise-50 text-turquoise-800 text-xs font-semibold">
-          <HelpCircle className="w-3.5 h-3.5 text-turquoise-600" />
-          <span>Orientação educativa para tutores</span>
-        </div>
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
-          Tem uma dúvida sobre os cuidados com seu pet?
+    <div className="mx-auto max-w-4xl space-y-8 px-4 py-8 sm:px-6 sm:py-12">
+      <header>
+        <h1 className="text-3xl font-bold tracking-tight text-petrol-950">
+          Dúvidas e cuidados com seu pet
         </h1>
-        <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-          Escreva sua pergunta com suas próprias palavras. A central procura respostas em uma base educativa segura e direciona para atendimento profissional quando a dúvida exige avaliação do animal.
+        <p className="mt-3 text-lg leading-relaxed text-slate-700">
+          Encontre uma resposta sem precisar esperar uma mensagem. Digite uma
+          palavra ou escolha um assunto abaixo.
         </p>
-      </div>
-
-      <div className="max-w-5xl mx-auto">
-        <TutorQuestionFinder faqs={allFaqs} clinic={clinic} />
-      </div>
-
-      <div className="max-w-5xl mx-auto grid gap-4 md:grid-cols-2">
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-5">
-          <div className="flex items-start gap-3">
-            <ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-700" />
-            <div>
-              <h2 className="font-bold text-emerald-950">O que esta central pode esclarecer</h2>
-              <p className="mt-1 text-sm leading-relaxed text-emerald-900/80">
-                Guarda responsável, adaptação de um novo pet, rotina, alimentação geral, higiene, vacinação, prevenção de parasitas, transporte, identificação, bem-estar e preparo para consultas.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="rounded-2xl border border-amber-200 bg-amber-50/70 p-5">
-          <div className="flex items-start gap-3">
-            <BookOpenCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-700" />
-            <div>
-              <h2 className="font-bold text-amber-950">O que exige médico-veterinário</h2>
-              <p className="mt-1 text-sm leading-relaxed text-amber-900/80">
-                Diagnóstico, definição de tratamento, medicamentos, dosagens, solicitação de exames e avaliação de urgência não são respondidos automaticamente. O atendimento presencial continua sendo a referência para avaliação clínica.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-4xl mx-auto border-t border-slate-200/80 pt-8">
-        <h2 className="text-xl font-bold text-slate-900 text-center mb-2">
-          Perguntas frequentes por assunto
+      </header>
+      <p className="rounded-xl bg-amber-50 p-4 text-base leading-relaxed text-amber-950">
+        Se o pet parece estar passando mal, procure atendimento veterinário.
+        Esta página traz informações gerais e não avalia a gravidade de um caso.
+      </p>
+      <FAQSearch faqs={faqs} whatsapp={clinic.whatsapp} />
+      <section
+        className="border-t border-slate-200 pt-8"
+        aria-labelledby="library-title"
+      >
+        <h2 id="library-title" className="text-2xl font-bold text-petrol-950">
+          Biblioteca para tutores
         </h2>
-        <p className="mb-6 text-center text-sm text-slate-500">
-          Navegue por todos os conteúdos educativos e informações práticas da clínica.
+        <p className="mt-3 text-base leading-relaxed text-slate-700">
+          Para continuar a leitura, consulte estas fontes. Os links abrem o site
+          de cada instituição. Conteúdos gerais não substituem as orientações
+          dadas na consulta.
         </p>
-        <FAQSearch faqs={allFaqs} whatsapp={clinic.whatsapp} />
-      </div>
-
-      <div className="max-w-4xl mx-auto rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-600">
-        <h2 className="font-bold text-slate-900">Critério de segurança e ética</h2>
-        <p className="mt-2 leading-relaxed">
-          Esta ferramenta é apenas educativa. Ela não realiza teleconsulta, diagnóstico, prescrição ou teletriagem profissional. O conteúdo segue o princípio de que avaliação clínica e decisões individualizadas pertencem ao médico-veterinário, respeitando as regras do Sistema CFMV/CRMVs.
+        <ul className="mt-4 space-y-3 text-base">
+          <li>
+            <a
+              className="inline-flex min-h-12 items-center font-semibold text-petrol-900 underline underline-offset-4"
+              href="https://www.msdvetmanual.com/pt/resourcespages/pet-owners-overview"
+            >
+              Manual MSD: cuidados com animais, em português
+            </a>
+          </li>
+          <li>
+            <a
+              className="inline-flex min-h-12 items-center font-semibold text-petrol-900 underline underline-offset-4"
+              href="https://wsava.org/global-guidelines/global-nutrition-guidelines/"
+            >
+              WSAVA: alimentação e materiais para tutores
+            </a>
+          </li>
+          <li>
+            <a
+              className="inline-flex min-h-12 items-center font-semibold text-petrol-900 underline underline-offset-4"
+              href="https://wsava.org/global-guidelines/vaccination-guidelines/"
+            >
+              WSAVA: referência sobre vacinação
+            </a>
+          </li>
+        </ul>
+        <p className="mt-3 text-sm text-slate-600">
+          A WSAVA disponibiliza materiais em português dentro dessas páginas. As
+          informações administrativas acompanham o cadastro da clínica.
         </p>
-        <div className="mt-3 flex flex-wrap gap-3 text-xs font-semibold">
-          <a href="https://www.cfmv.gov.br/resolucao-do-cfmv-regulamenta-a-telemedicina-veterinaria/comunicacao/noticias/2022/06/29/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-petrol-800 hover:text-petrol-950">
-            Resolução CFMV nº 1.465/2022 <ExternalLink className="h-3 w-3" />
-          </a>
-          <a href="https://crmvsp.gov.br/infograficos/guarda-responsavel-uma-questao-de-saude-publica/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-petrol-800 hover:text-petrol-950">
-            Guarda responsável — CRMV-SP <ExternalLink className="h-3 w-3" />
-          </a>
-        </div>
-      </div>
-
-      <div className="max-w-3xl mx-auto bg-gradient-to-r from-petrol-900 to-slate-900 text-white rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-5 shadow-card">
-        <div className="space-y-1 text-center sm:text-left">
-          <h3 className="text-base sm:text-lg font-bold">
-            Sua dúvida depende do histórico ou do estado atual do pet?
-          </h3>
-          <p className="text-xs sm:text-sm text-slate-300">
-            Fale com a clínica para saber a forma adequada de atendimento.
-          </p>
-        </div>
-
-        <WhatsAppButton
-          phone={clinic.whatsapp}
-          message="Olá! Consultei a Central de Dúvidas do site, mas minha pergunta depende de uma orientação da equipe."
-          variant="coral"
-          size="md"
-          className="flex-shrink-0"
-        >
-          Falar com a clínica
+      </section>
+      <section className="rounded-2xl border border-slate-200 bg-white p-5">
+        <h2 className="text-xl font-bold">Ainda precisa de ajuda?</h2>
+        <p className="my-3 text-base text-slate-700">
+          A equipe pode esclarecer dúvidas sobre o atendimento e orientar o
+          próximo passo.
+        </p>
+        <WhatsAppButton phone={clinic.whatsapp} size="lg">
+          Falar com a equipe
         </WhatsAppButton>
-      </div>
-
-      <div className="max-w-3xl mx-auto">
-        <EmergencyNotice clinic={clinic} />
-      </div>
+      </section>
     </div>
   );
 }

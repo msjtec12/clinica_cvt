@@ -142,11 +142,11 @@ export function TutorQuestionFinder({ faqs, clinic }: Props) {
         <div className="text-center space-y-2">
           <div className="mx-auto inline-flex items-center gap-2 rounded-full bg-petrol-50 px-3 py-1 text-xs font-semibold text-petrol-800">
             <BookOpenCheck className="h-4 w-4" />
-            Busca educativa segura
+            Busca de perguntas frequentes
           </div>
           <h2 className="text-xl font-extrabold text-slate-900 sm:text-2xl">Qual é a sua dúvida sobre seu pet?</h2>
           <p className="text-sm leading-relaxed text-slate-600">
-            Escreva como você falaria normalmente. O site procura a resposta em conteúdos educativos revisados, sem diagnosticar nem indicar medicamentos.
+            Escreva como você falaria normalmente. O site procura a resposta em perguntas frequentes cadastradas, sem diagnosticar nem indicar medicamentos.
           </p>
         </div>
 
