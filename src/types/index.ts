@@ -52,6 +52,7 @@ export interface ServiceItem {
 }
 
 export interface FAQItem {
+  source?: { label: string; url: string };
   id: string;
   category: string;
   categoryName: string;

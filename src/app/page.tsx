@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { routineFaqs } from "@/data/routineFaqs";
+import { FAQAccordion } from "@/components/faq/FAQAccordion";
 import { ArrowRight, Clock3, MapPin, Phone } from "lucide-react";
 import { getClinicSettings, getServices } from "@/lib/data-service";
 import { isFilled } from "@/lib/utils";
@@ -100,6 +102,24 @@ export default async function HomePage() {
         </div>
       </section>
       <div className="mx-auto max-w-7xl space-y-12 px-4 py-10 sm:px-6 lg:px-8">
+        <section aria-labelledby="routine-title">
+          <h2
+            id="routine-title"
+            className="mb-5 text-2xl font-bold text-petrol-950"
+          >
+            Respostas rápidas antes de sair de casa
+          </h2>
+          <FAQAccordion
+            items={routineFaqs(clinic).slice(0, 4)}
+            whatsapp={clinic.whatsapp}
+          />
+          <Link
+            href="/duvidas"
+            className="mt-4 inline-flex min-h-12 items-center text-lg font-semibold text-petrol-900 underline"
+          >
+            Ver todas as dúvidas e cuidados
+          </Link>
+        </section>
         <section aria-labelledby="services-title">
           <h2
             id="services-title"
